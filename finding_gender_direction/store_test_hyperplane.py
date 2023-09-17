@@ -4,7 +4,7 @@ import torch
 from tqdm import tqdm
 from concept_erasure import leace
 from sklearn.linear_model import LogisticRegression
-import utils
+import utils as utils
 
 def storing_hyperplanes(dataset : list[list], post_layer_norm = True, **dict):
   device = dict['device']

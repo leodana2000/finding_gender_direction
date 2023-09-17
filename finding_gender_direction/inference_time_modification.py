@@ -1,9 +1,8 @@
 #
 
 import torch
-import utils
+import utils as utils
 from tqdm import tqdm
-
 
 
 

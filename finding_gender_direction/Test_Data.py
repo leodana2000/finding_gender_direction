@@ -1,23 +1,17 @@
 #
 
-import Train_Data
-eos_token = "<|end-of-text|>"
+import pandas as pd
+import utils
 
-#list of tokens counted as "good" answers
-text_lists = [["he", " he", "He", " He",
-                 "him", " him", "Him", " Him",
-                 "his", " his", "His", " His",
-                 "male", " male", "Male", " Male",
-                 "son", " son", "Son", " Son",
-                 "father", " father", "Father", " Father",
-                 "boy", " boy", "Boy", " Boy",
-                 ],
-              ["she", " she", "She", " She",
-               "her", " her", "Her", " Her",
-               "female", " female", "Female", " Female",
-               "daugther", " daugther", "Daugther", " Daugther",
-               "mother", " mother", "Mother", " Mother",
-               "girl", " girl", "girl", " girl",]]
+D2 = pd.read_csv("finding_gender_direction/yob1880.csv")
+threshold = 20
+D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
+D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
+
+Train_f, Test_f = utils.split_list([word for word in D2_f])
+Train_m, Test_m = utils.split_list([word for word in D2_m])
+
+eos_token = "<|end-of-text|>"
 
 
 #female sentences
@@ -63,6 +57,7 @@ target_text_A = [
     " female",
     " girl",
 ]
+target_text_A += target_text_A
 
 pre_prompt_a = "He is a boy. Answer: male \n "
 pre_prompt_b = "She is a girl. Answer female \n "
@@ -97,7 +92,6 @@ example_prompts_B = ["The young lord is talented. Answer:",
        "The hero is brave and has no fear. Answer:",
        "The man is confident and speaks loud. Answer:",
        "The male CEO is successful and leads the company to prosperity. Answer:",
-       "The father-in-law is supportive and offers guidance. Answer:",
        "The boy is imaginative and creates fantastic stories. Answer:",
        ]
 
@@ -117,9 +111,9 @@ target_text_B = [
     " hero",
     " man",
     " male",
-    " father-in-law",
     " boy",
 ]
+target_text_B += target_text_B
 
 pre_prompt_a = "He is a boy. Answer: male \n "
 pre_prompt_b = "She is a girl. Answer female \n "
@@ -145,6 +139,7 @@ example_prompts_C = ["Hi, my name is " + name + ". Answer:" for name in Test_f]
 
 #use "" to ask for the last token
 target_text_C = [" " + name for name in Test_f]
+target_text_C += target_text_C
 
 pre_prompt_a = "He is a boy. Answer: male \n "
 pre_prompt_b = "She is a girl. Answer female \n "
@@ -168,10 +163,11 @@ example_prompts_C = [eos_token
 #!! doesn't recognize correctly all of them !!
 
 #evaluation prompt: checked that all prompt are understood by GPT2-xl
-example_prompts_D = ["Hi, my name is " + name[0] + ". Answer:" for name in Test_m_2]
+example_prompts_D = ["Hi, my name is " + name[0] + ". Answer:" for name in Test_m]
 
 #use "" to ask for the last token
-target_text_D = [" " + name[0] for name in Test_m_2]
+target_text_D = [" " + name[0] for name in Test_m]
+target_text_D += target_text_D
 
 pre_prompt_a = "He is a boy. Answer: male \n "
 pre_prompt_b = "She is a girl. Answer female \n "
@@ -187,3 +183,11 @@ example_prompts_D = [eos_token
                      + pre_prompt_a
                      + pre_prompt_b
                      + example for example in example_prompts_D]
+
+D = {
+    'question': example_prompts_A + example_prompts_B + example_prompts_C + example_prompts_D,
+    'data_num': ['a']*len(example_prompts_A) + ['b']*len(example_prompts_B) + ['c']*len(example_prompts_C) + ['d']*len(example_prompts_D),
+    'target': target_text_A + target_text_B + target_text_C + target_text_D,
+}
+DF = pd.DataFrame.from_dict(D, orient = 'columns')
+pd.DataFrame.to_csv(DF, "finding_gender_direction/Test_Data.csv")

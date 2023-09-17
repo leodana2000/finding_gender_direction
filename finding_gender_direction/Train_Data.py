@@ -1,7 +1,7 @@
 #This document contains the data I used for my experiments, as well as the preprocessing fuctions.
 
 import pandas as pd
-import utils
+from finding_gender_direction import utils
 eos_token = "<|end-of-text|>"
 
 
@@ -83,13 +83,6 @@ for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
   Train_m, Test_m = utils.split_list(d1_m)
   Train_f, Test_f = utils.split_list(d1_f)
 
-  print("Male " + d1_name + ":\n",
-        "Train:", len(Train_m), "\n",
-        "Test:", len(Test_m),
-        "\nFemale " + d1_name + ":\n",
-        "Train:", len(Train_f), "\n",
-        "Test:", len(Test_f), "\n")
-
   Train_m = utils.concat_list([[(eos_token + prpt + word, 1) for word in Train_m] for prpt in prompt])
   Train_f = utils.concat_list([[(eos_token + prpt + word, -1) for word in Train_f] for prpt in prompt])
   Test_m = utils.concat_list([[(eos_token + prpt + word, 1) for word in Test_m] for prpt in prompt])
@@ -99,24 +92,6 @@ for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
   Train_f_1 += Train_f
   Test_m_1 += Test_m
   Test_f_1 += Test_f
-
-Train_1 = Train_m_1 + Train_f_1
-Data_1 = Train_1 + Test_m_1 + Test_f_1
-Data_m_1 = Train_m_1 + Test_m_1
-Data_f_1 = Train_f_1 + Test_f_1
-
-print("Training examples:", len(Train_1),
-      "\nTest examples:", len(Test_m_1) + len(Test_f_1))
-
-#batching the data to learn it
-batch_size = 1024
-Nb_ex = len(Train_1)
-Nb_batch = Nb_ex//batch_size + 1
-Train_1 = [Train_1[i*batch_size:min((i+1)*batch_size, Nb_ex)] for i in range(Nb_batch)]
-
-Nb_ex = len(Data_1)
-Nb_batch = Nb_ex//batch_size + 1
-Data_1 = [Data_1[i*batch_size:min((i+1)*batch_size, Nb_ex)] for i in range(Nb_batch)]
 
 
 #Creation of the dataset D2: it contains gendered names.
@@ -139,26 +114,21 @@ prompt_f = ["",
 Train_f, Test_f = utils.split_list([word for word in D2_f])
 Train_m, Test_m = utils.split_list([word for word in D2_m])
 
-print("Male names:\n", "Train:", len(Train_m), "\n", "Test:", len(Test_m), "\nFemale names:\n", "Train:", len(Train_f), "\n", "Test:", len(Test_f))
-
 Train_m_2 = utils.concat_list([[(eos_token + prpt + word, 1) for word in Train_m] for prpt in prompt_m])
 Train_f_2 = utils.concat_list([[(eos_token + prpt + word, -1) for word in Train_f] for prpt in prompt_f])
 Test_m_2 = utils.concat_list([[(eos_token + prpt + word, 1) for word in Test_m] for prpt in prompt_m])
 Test_f_2 = utils.concat_list([[(eos_token + prpt + word, -1) for word in Test_f] for prpt in prompt_f])
 
-Train_2 = Train_m_2 + Train_f_2
-Test_2 = Test_m_2 + Test_f_2
-Data_2 = Train_2 + Test_2
+data_num = [1]*len(Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1) + [2]*len(Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2)
+gender = [1]*len(Train_m_1) + [-1]*len(Train_f_1) + [1]*len(Test_m_1) + [-1]*len(Test_f_1) + [1]*len(Train_m_2) + [-1]*len(Train_f_2) + [1]*len(Test_m_2) + [-1]*len(Test_f_2)
+train = [1]*len(Train_m_1 + Train_f_1) + [0]*len(Test_m_1 + Test_f_1) + [1]*len(Train_m_2 + Train_f_2) + [0]*len(Test_m_2 + Test_f_2)
 
-print("Training examples:", len(Train_2),
-      "\nTest examples:", len(Test_2))
+D = {
+  'examples': Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1 + Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2,
+  'data_num': data_num,
+  'gender': gender,
+  'train': train,
+  }
 
-#batching the data to learn it
-batch_size = 1024
-Nb_ex = len(Train_2)
-Nb_batch = Nb_ex//batch_size + 1
-Train_2 = [Train_2[i*batch_size:min((i+1)*batch_size, Nb_ex)] for i in range(Nb_batch)]
-
-Nb_ex = len(Data_2)
-Nb_batch = Nb_ex//batch_size + 1
-Data_2 = [Data_2[i*batch_size:min((i+1)*batch_size, Nb_ex)] for i in range(Nb_batch)]
+DF = pd.DataFrame.from_dict(D, orient = 'columns')
+pd.DataFrame.to_csv(DF, "finding_gender_direction/Train_Data.csv")
