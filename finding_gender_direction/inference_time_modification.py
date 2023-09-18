@@ -51,7 +51,7 @@ def fast_compute_score(tokens, token_lists, leace_list, len_example, hook, layer
 
 
 #Fast way to intervene on the cache by using the custom attention.
-def fast_cache_intervention(stream_indices, example_indices, stream_example_indices, meta_hook):
+def fast_cache_intervention(meta_hook):
   def aux(tokens, token_lists, leace_list, leace_res_list, len_example, hook, layer_list, layer_res_list, **dict):
     model = dict['model']
     device = dict['device']
@@ -107,8 +107,7 @@ def fast_score(example_prompts, token_lists, leace_list, leace_res_list, target_
 
 
   if attention_only:
-    fast_method = fast_cache_intervention(stream_indices, example_indices, stream_example_indices, 
-                                          hook_attn(stream_indices, example_indices, stream_example_indices))
+    fast_method = fast_cache_intervention(hook_attn(stream_indices, example_indices, stream_example_indices))
   else:
     fast_method = fast_compute_score
 
