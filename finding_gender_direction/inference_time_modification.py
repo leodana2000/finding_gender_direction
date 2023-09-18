@@ -1,4 +1,5 @@
-#
+#code that contains the main functions performing the inference-time-modification
+#you can use it directly in the notebook, or anywhere else : the only function to call is fast_score
 
 import torch
 import utils as utils
@@ -89,8 +90,20 @@ def fast_cache_intervention(meta_hook):
 
 
 #Initiate a fast way to compute the score, that doesn't involves looking at tokens of length > 1.
-def fast_score(example_prompts, token_lists, leace_list, leace_res_list, target_tokens,
-               layer_list, layer_res_list, lbds = [1], attention_only = False, **dict):
+def fast_score(example_prompts : list[str], token_lists : list[list[int]], leace_list,
+              leace_res_list, target_tokens : list[list[int]], layer_list : list[list[int]], 
+              layer_res_list : list[int], lbds = [1], **dict):
+  '''
+  This function returns the probabilities of each answer for each example and each lambda.
+  - example_prompts : list[str], examples to test,
+  - token_lists : list[list[int]], token that will count as an answer, position 0 is male and 1 is female,
+  - leace_list : list[leace], all leace estimators in attention (one per layer),
+  - leace_res_list : list[leace], all leace estimators in residual (one per layer),
+  - target_tokens : list[int] which token to target in the examples,
+  - layer_list : list[list[int]] which layer to apply the intervention on attention, you can test multiple in a row,
+  - layer_res_list : list[list[int]] which layer to apply the intervention in the residual, you can test multiple in a row,
+  - lbds : list[float] parameters lambda to test,
+  '''
   tokenizer = dict['tokenizer']
   device = dict['device']
 
@@ -106,13 +119,8 @@ def fast_score(example_prompts, token_lists, leace_list, leace_res_list, target_
   example_tokens = tokenizer(example_prompts, padding = True, return_tensors = 'pt').input_ids.to(device)
 
 
-  if attention_only:
-    fast_method = fast_cache_intervention(hook_attn(stream_indices, example_indices, stream_example_indices))
-  else:
-    fast_method = fast_compute_score
-
-  print("Computation of writing scores")
   score = []
+  fast_method = fast_cache_intervention(hook_attn(stream_indices, example_indices, stream_example_indices))
   for lbd in tqdm(lbds):
     hook = hook_wte(lbd, stream_indices, example_indices)
     score.append(fast_method(example_tokens, token_lists, leace_list, leace_res_list, len_examples,

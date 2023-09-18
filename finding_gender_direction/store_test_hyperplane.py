@@ -1,4 +1,5 @@
-#
+#code that contains the functions to store and evaluate hyperplanes and directions
+#You can use them in the notebook
 
 import torch
 from tqdm import tqdm
