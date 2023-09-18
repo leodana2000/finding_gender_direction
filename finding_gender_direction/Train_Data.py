@@ -1,4 +1,4 @@
-#This document contains the data I used for my experiments, as well as the preprocessing fuctions.
+#code to generate de training data
 
 import pandas as pd
 import utils

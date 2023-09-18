@@ -1,4 +1,4 @@
-#A QUOI CA SERT
+#code containing all the useful functions for the notebook to run
 
 import torch
 import random
