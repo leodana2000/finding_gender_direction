@@ -1,7 +1,7 @@
 #This document contains the data I used for my experiments, as well as the preprocessing fuctions.
 
 import pandas as pd
-from finding_gender_direction import utils
+import utils
 eos_token = "<|end-of-text|>"
 
 
@@ -83,10 +83,10 @@ for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
   Train_m, Test_m = utils.split_list(d1_m)
   Train_f, Test_f = utils.split_list(d1_f)
 
-  Train_m = utils.concat_list([[(eos_token + prpt + word, 1) for word in Train_m] for prpt in prompt])
-  Train_f = utils.concat_list([[(eos_token + prpt + word, -1) for word in Train_f] for prpt in prompt])
-  Test_m = utils.concat_list([[(eos_token + prpt + word, 1) for word in Test_m] for prpt in prompt])
-  Test_f = utils.concat_list([[(eos_token + prpt + word, -1) for word in Test_f] for prpt in prompt])
+  Train_m = utils.concat_list([[eos_token + prpt + word for word in Train_m] for prpt in prompt])
+  Train_f = utils.concat_list([[eos_token + prpt + word for word in Train_f] for prpt in prompt])
+  Test_m = utils.concat_list([[eos_token + prpt + word for word in Test_m] for prpt in prompt])
+  Test_f = utils.concat_list([[eos_token + prpt + word for word in Test_f] for prpt in prompt])
 
   Train_m_1 += Train_m
   Train_f_1 += Train_f
@@ -99,7 +99,7 @@ for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
 #They are embedded into different prompts.
 #Executing the file gives the amount of final example for each classes.
 
-D2 = pd.read_csv("yob1880.csv")
+D2 = pd.read_csv("finding_gender_direction/yob1880.csv")
 threshold = 20
 D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
 D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
@@ -114,10 +114,10 @@ prompt_f = ["",
 Train_f, Test_f = utils.split_list([word for word in D2_f])
 Train_m, Test_m = utils.split_list([word for word in D2_m])
 
-Train_m_2 = utils.concat_list([[(eos_token + prpt + word, 1) for word in Train_m] for prpt in prompt_m])
-Train_f_2 = utils.concat_list([[(eos_token + prpt + word, -1) for word in Train_f] for prpt in prompt_f])
-Test_m_2 = utils.concat_list([[(eos_token + prpt + word, 1) for word in Test_m] for prpt in prompt_m])
-Test_f_2 = utils.concat_list([[(eos_token + prpt + word, -1) for word in Test_f] for prpt in prompt_f])
+Train_m_2 = utils.concat_list([[eos_token + prpt + word for word in Train_m] for prpt in prompt_m])
+Train_f_2 = utils.concat_list([[eos_token + prpt + word for word in Train_f] for prpt in prompt_f])
+Test_m_2 = utils.concat_list([[eos_token + prpt + word for word in Test_m] for prpt in prompt_m])
+Test_f_2 = utils.concat_list([[eos_token + prpt + word for word in Test_f] for prpt in prompt_f])
 
 data_num = [1]*len(Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1) + [2]*len(Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2)
 gender = [1]*len(Train_m_1) + [-1]*len(Train_f_1) + [1]*len(Test_m_1) + [-1]*len(Test_f_1) + [1]*len(Train_m_2) + [-1]*len(Train_f_2) + [1]*len(Test_m_2) + [-1]*len(Test_f_2)

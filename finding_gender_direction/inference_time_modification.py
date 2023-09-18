@@ -108,7 +108,7 @@ def fast_score(example_prompts, token_lists, leace_list, leace_res_list, target_
 
   if attention_only:
     fast_method = fast_cache_intervention(stream_indices, example_indices, stream_example_indices, 
-                                          hook_attn(stream_indices, example_indices, stream_example_indices), **dict)
+                                          hook_attn(stream_indices, example_indices, stream_example_indices))
   else:
     fast_method = fast_compute_score
 
