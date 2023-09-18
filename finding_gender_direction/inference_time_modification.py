@@ -116,7 +116,7 @@ def fast_score(example_prompts, token_lists, leace_list, leace_res_list, target_
   for lbd in tqdm(lbds):
     hook = hook_wte(lbd, stream_indices, example_indices)
     score.append(fast_method(example_tokens, token_lists, leace_list, leace_res_list, len_examples,
-                                 hook, layer_list, layer_res_list))
+                                 hook, layer_list, layer_res_list), **dict)
 
   del example_tokens
   del stream_indices
