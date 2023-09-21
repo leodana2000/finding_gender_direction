@@ -120,11 +120,10 @@ def fast_score(example_prompts : list[str], token_lists : list[list[int]], leace
 
 
   score = []
-  fast_method = fast_cache_intervention()
   for lbd in tqdm(lbds):
     hook = hook_wte(lbd, stream_indices, example_indices)
     meta_hook = hook_attn(stream_indices, example_indices, stream_example_indices)
-    score.append(fast_method(example_tokens, token_lists, leace_list, leace_res_list, 
+    score.append(fast_cache_intervention(example_tokens, token_lists, leace_list, leace_res_list, 
                              len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
 
   del example_tokens
