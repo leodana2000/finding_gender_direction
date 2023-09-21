@@ -52,8 +52,9 @@ def fast_compute_score(tokens, token_lists, leace_list, len_example, hook, layer
 
 
 #Fast way to intervene on the cache by using the custom attention.
-def fast_cache_intervention(meta_hook):
-  def aux(tokens, token_lists, leace_list, leace_res_list, len_example, hook, layer_list, layer_res_list, **dict):
+def fast_cache_intervention(tokens, token_lists, leace_list, leace_res_list,
+                            len_example, meta_hook, hook, layer_list,
+                            layer_res_list, **dict):
     model = dict['model']
     device = dict['device']
 
@@ -86,7 +87,6 @@ def fast_cache_intervention(meta_hook):
       del probas
 
     return score
-  return aux
 
 
 #Initiate a fast way to compute the score, that doesn't involves looking at tokens of length > 1.
@@ -120,11 +120,12 @@ def fast_score(example_prompts : list[str], token_lists : list[list[int]], leace
 
 
   score = []
-  fast_method = fast_cache_intervention(hook_attn(stream_indices, example_indices, stream_example_indices))
+  fast_method = fast_cache_intervention()
   for lbd in tqdm(lbds):
     hook = hook_wte(lbd, stream_indices, example_indices)
-    score.append(fast_method(example_tokens, token_lists, leace_list, leace_res_list, len_examples,
-                                 hook, layer_list, layer_res_list, **dict))
+    meta_hook = hook_attn(stream_indices, example_indices, stream_example_indices)
+    score.append(fast_method(example_tokens, token_lists, leace_list, leace_res_list, 
+                             len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
 
   del example_tokens
   del stream_indices
