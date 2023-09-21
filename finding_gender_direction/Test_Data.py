@@ -1,7 +1,7 @@
 #code to generate de test data
 
 import pandas as pd
-import utils
+from finding_gender_direction import utils
 
 D2 = pd.read_csv("finding_gender_direction/yob1880.csv")
 threshold = 20

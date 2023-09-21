@@ -2,7 +2,7 @@
 #you can use it directly in the notebook, or anywhere else : the only function to call is fast_score
 
 import torch
-import utils as utils
+from finding_gender_direction import utils
 from tqdm import tqdm
 
 

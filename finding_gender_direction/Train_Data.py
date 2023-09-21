@@ -1,7 +1,7 @@
 #code to generate de training data
 
 import pandas as pd
-import utils
+from finding_gender_direction import utils
 eos_token = "<|end-of-text|>"
 
 
