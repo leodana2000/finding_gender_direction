@@ -94,7 +94,7 @@ for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
   Test_m_1 += Test_m
   Test_f_1 += Test_f
 
-
+print(Train_m_1)
 #Creation of the dataset D2: it contains gendered names.
 #There is a total of ~750 distinct names.
 #They are embedded into different prompts.
@@ -132,4 +132,4 @@ D = {
   }
 
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
-pd.DataFrame.to_csv(DF, "finding_gender_direction/Train_Data.csv", quoting=csv.QUOTE_NONE, escapechar="'")
+pd.DataFrame.to_csv(DF, "finding_gender_direction/Train_Data.csv", quotechar='"')

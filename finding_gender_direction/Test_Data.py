@@ -192,4 +192,4 @@ D = {
     'target': target_text_A + target_text_B + target_text_C + target_text_D,
 }
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
-pd.DataFrame.to_csv(DF, "finding_gender_direction/Test_Data.csv", quoting=csv.QUOTE_NONE, escapechar="'")
+pd.DataFrame.to_csv(DF, "finding_gender_direction/Test_Data.csv")#, quoting=csv.QUOTE_NONE, escapechar="'")
