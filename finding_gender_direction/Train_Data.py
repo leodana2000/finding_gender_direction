@@ -24,48 +24,48 @@ D1_f = [D1_pronoun_f, D1_noun_f, D1_anatomy_f]
 
 
 prompt_noun = [
-    "The ",
-    " ",
-    "It doesn't matter who you are, you can be the ",
-    "My friend often dresses like a ",
-    "I like this movie because it features my favorite comedian playing the ",
-    "I was scared by these people until realized it was just the ",
-    "I usually don't like crowded places, but this time the ",
+    'The ',
+    ' ',
+    'It doesn\'t matter who you are, you can be the ',
+    'My friend often dresses like a ',
+    'I like this movie because it features my favorite comedian playing the ',
+    'I was scared by these people until realized it was just the ',
+    'I usually don\'t like crowded places, but this time the ',
 ]
 
 prompt_pronoun = [
-    "The detective examined the crime scene.",
-    "The teacher stood at the front of the classroom.",
-    "The chef prepared a delicious meal.",
-    "The writer typed away on the keyboard.",
-    "The artist applied vibrant colors to the canvas.",
-    "The pilot expertly maneuvered the plane the sky.",
-    "The scientist conducted experiments.",
-    "The firefighter rushed into the building.",
-    "The athlete trained rigorously.",
-    "The electrician checked all the wiring.",
-    "The gardener tended to the vegetables.",
-    "The photographer captured stunning images.",
-    "The mechanic fixed the engine.",
-    "The surgeon performed the operation.",
-    "The runner completed the marathon.",
-    "The plumber unclogged the pipe.",
-    "The veterinarian gently cared for the animal.",
-    "The construction worker built the house.",
-    "The cashier scanned all the items.",
-    "The dancer performed an elegant routine.",
-    "The musician played a beautiful melody.",
-    "The architect designed an innovative building.",
-    "The farmer harvested the ripe crops.",
-    "The custodian cleaned the entire office building.",
-    "",
+    'The detective examined the crime scene.',
+    'The teacher stood at the front of the classroom.',
+    'The chef prepared a delicious meal.',
+    'The writer typed away on the keyboard.',
+    'The artist applied vibrant colors to the canvas.',
+    'The pilot expertly maneuvered the plane the sky.',
+    'The scientist conducted experiments.',
+    'The firefighter rushed into the building.',
+    'The athlete trained rigorously.',
+    'The electrician checked all the wiring.',
+    'The gardener tended to the vegetables.',
+    'The photographer captured stunning images.',
+    'The mechanic fixed the engine.',
+    'The surgeon performed the operation.',
+    'The runner completed the marathon.',
+    'The plumber unclogged the pipe.',
+    'The veterinarian gently cared for the animal.',
+    'The construction worker built the house.',
+    'The cashier scanned all the items.',
+    'The dancer performed an elegant routine.',
+    'The musician played a beautiful melody.',
+    'The architect designed an innovative building.',
+    'The farmer harvested the ripe crops.',
+    'The custodian cleaned the entire office building.',
+    '',
 ]
 
 prompt_anatomy = [
-    "The doctor told me I have a problem with my ",
-    "The medical term is ",
-    "The ",
-    " ",
+    'The doctor told me I have a problem with my ',
+    'The medical term is ',
+    'The ',
+    ' ',
 ]
 
 prompts = [prompt_pronoun, prompt_noun, prompt_anatomy]
@@ -104,12 +104,12 @@ threshold = 20
 D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
 D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
 
-prompt_m = ["",
-            "My name is ",
-            "His name is "]
-prompt_f = ["",
-            "My name is ",
-            "Her name is "]
+prompt_m = ['',
+            'My name is ',
+            'His name is ']
+prompt_f = ['',
+            'My name is ',
+            'Her name is ']
 
 Train_f, Test_f = utils.split_list([word for word in D2_f])
 Train_m, Test_m = utils.split_list([word for word in D2_m])
