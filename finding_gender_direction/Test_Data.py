@@ -1,7 +1,8 @@
 #code to generate de test data
 
 import pandas as pd
-from finding_gender_direction import utils
+import csv
+import utils
 
 D2 = pd.read_csv('finding_gender_direction/yob1880.csv')
 threshold = 20
@@ -191,4 +192,4 @@ D = {
     'target': target_text_A + target_text_B + target_text_C + target_text_D,
 }
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
-pd.DataFrame.to_csv(DF, "finding_gender_direction/Test_Data.csv")
+pd.DataFrame.to_csv(DF, "finding_gender_direction/Test_Data.csv", quoting=csv.QUOTE_NONE, escapechar="'")

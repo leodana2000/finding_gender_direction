@@ -1,8 +1,9 @@
 #code to generate de training data
 
 import pandas as pd
-from finding_gender_direction import utils
-eos_token = "<|end-of-text|>"
+import csv
+import utils
+eos_token = '<|end-of-text|>'
 
 
 #Creation of the dataset D1: it contains gendered words (nouns, pronouns, and anatomy).
@@ -131,4 +132,4 @@ D = {
   }
 
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
-pd.DataFrame.to_csv(DF, "finding_gender_direction/Train_Data.csv")
+pd.DataFrame.to_csv(DF, "finding_gender_direction/Train_Data.csv", quoting=csv.QUOTE_NONE, escapechar="'")
