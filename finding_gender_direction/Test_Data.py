@@ -5,7 +5,7 @@ import csv
 import utils
 
 D2 = pd.read_csv('finding_gender_direction/yob1880.csv')
-threshold = 20
+threshold = 20 #to only use the names that are 'real names'
 D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
 D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
 
@@ -162,7 +162,7 @@ example_prompts_C = [eos_token
 
 
 #male names
-#!! doesn't recognize correctly all of them !!
+#!! gpt2-xl doesn't recognize correctly all of them !!
 
 #evaluation prompt: checked that all prompt are understood by GPT2-xl
 example_prompts_D = ['Hi, my name is ' + name[0] + '. Answer:' for name in Test_m]
