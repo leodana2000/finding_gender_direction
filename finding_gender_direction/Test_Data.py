@@ -61,7 +61,7 @@ target_text_A = [
 target_text_A += target_text_A
 
 pre_prompt_a = 'He is a boy. Answer: male \n '
-pre_prompt_b = 'She is a girl. Answer female \n '
+pre_prompt_b = 'She is a girl. Answer: female \n '
 
 pre_prompt = 'The task is to predict the gender of the character in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
@@ -118,7 +118,7 @@ target_text_B = [
 target_text_B += target_text_B
 
 pre_prompt_a = 'He is a boy. Answer: male \n '
-pre_prompt_b = 'She is a girl. Answer female \n '
+pre_prompt_b = 'She is a girl. Answer: female \n '
 
 pre_prompt = 'The task is to predict the gender of the caracter in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
@@ -144,7 +144,7 @@ target_text_C = [" " + name for name in Test_f]
 target_text_C += target_text_C
 
 pre_prompt_a = 'He is a boy. Answer: male \n '
-pre_prompt_b = 'She is a girl. Answer female \n '
+pre_prompt_b = 'She is a girl. Answer: female \n '
 
 pre_prompt = 'The task is to predict the gender of the caracter in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
@@ -172,7 +172,7 @@ target_text_D = [' ' + name[0] for name in Test_m]
 target_text_D += target_text_D
 
 pre_prompt_a = 'He is a boy. Answer: male \n '
-pre_prompt_b = 'She is a girl. Answer female \n '
+pre_prompt_b = 'She is a girl. Answer: female \n '
 
 pre_prompt = 'The task is to predict the gender of the caracter in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
