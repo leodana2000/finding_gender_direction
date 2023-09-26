@@ -12,7 +12,7 @@ D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
 Train_f, Test_f = utils.split_list([word for word in D2_f])
 Train_m, Test_m = utils.split_list([word for word in D2_m])
 
-eos_token = '<|end-of-text|>'
+eos_token = '<|endoftext|>'
 
 
 #female sentences

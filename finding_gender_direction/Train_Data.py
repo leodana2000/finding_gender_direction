@@ -3,7 +3,7 @@
 import pandas as pd
 import csv
 import utils
-eos_token = '<|end-of-text|>'
+eos_token = '<|endoftext|>'
 
 
 #Creation of the dataset D1: it contains gendered words (nouns, pronouns, and anatomy).

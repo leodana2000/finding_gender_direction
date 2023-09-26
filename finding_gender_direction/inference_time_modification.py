@@ -9,46 +9,7 @@ from tqdm import tqdm
 
 #Fast way to compute the probability for any nb_tokens but only when the tokens are of length one.
 def fast_proba(token_list, len_example, proba):
-  arr = torch.arange(len(len_example))
-  proba = torch.sum(proba[arr, len_example][:, token_list].squeeze(-1), dim = -1).unsqueeze(0)
-  del arr
-  return proba
-
-
-
-#Computes rapidly the probability with all the hooks.
-def fast_forward(tokens, hook, leace_list, layers, **dict):
-  model = dict['model']
-  device = dict['device']
-
-  for layer in layers:
-    model.transformer.h[layer].register_forward_pre_hook(hook(leace_list[layer]))
-
-  logits = model(tokens.to(device)).logits
-
-  for layer in layers:
-    model.transformer.h[layer]._forward_pre_hooks.clear()
-
-  return torch.softmax(logits, dim = -1)
-
-
-
-#Compute the probability of male and female tokens when applying the hook at all the relevant layers.
-def fast_compute_score(tokens, token_lists, leace_list, len_example, hook, layer_list, **dict):
-  score = []
-  for layers in layer_list:
-    probas = fast_forward(tokens, hook, leace_list, layers, **dict)
-
-    proba_male = fast_proba(token_lists[0], len_example, probas)
-    proba_female = fast_proba(token_lists[1], len_example, probas)
-
-    score.append(torch.cat([proba_male, proba_female], dim = 0).unsqueeze(0))
-
-    del proba_male
-    del proba_female
-    del probas
-
-  return score
+  return torch.sum(proba[torch.arange(len(len_example)), len_example][:, token_list].squeeze(-1), dim = -1).unsqueeze(0)
 
 
 #Fast way to intervene on the cache by using the custom attention.
@@ -175,9 +136,9 @@ def attn_forward(module,
       example_ind = example_indices[target_indices]
       stream_ind = stream_indices[target_indices]
 
-      aux_query = query[:, :, :stream+1]
-      aux_key = key[:, :, :stream+1]
-      aux_value = value[:, :, :stream+1]
+      aux_query = query[:, :, :stream + 1]
+      aux_key = key[:, :, :stream + 1]
+      aux_value = value[:, :, :stream + 1]
 
       #We compute the attention until {stream}.
       attn_outputs, _ = module._attn(aux_query, aux_key, aux_value)
@@ -186,7 +147,7 @@ def attn_forward(module,
       #We change afterward the cache on the targeted examples.
       key[example_ind, :, stream_ind] = interv_key[example_ind, :, stream_ind]
       value[example_ind, :, stream_ind] = interv_value[example_ind, :, stream_ind]
-      last_stream = stream+1
+      last_stream = stream + 1
 
   attn_outputs, _ = module._attn(query, key, value)
   a.append(attn_outputs[:, :, last_stream:])
