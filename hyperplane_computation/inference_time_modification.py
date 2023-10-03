@@ -2,6 +2,12 @@
 #you can use it directly in the notebook, or anywhere else : the only function to call is fast_score
 
 import torch
+import sys
+import os
+sys.path.append('C:\\Users\\léo\\Desktop\\Travail\\Informatique\\GitHub\\finding_gender_direction')
+print(sys.path)
+print(os.listdir('C:\\Users\\léo\\Desktop\\Travail\\Informatique\\GitHub'))
+import finding_gender_direction
 from finding_gender_direction.hyperplane_computation import utils
 from tqdm import tqdm
 
