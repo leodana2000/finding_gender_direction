@@ -1,8 +1,5 @@
 #code to generate de training data
-import sys
-sys.path.insert(0, "Users/léo/Desktop/Travail/Informatique/GitHub/finding-gender-direction/hyperplane_computation/utils.py")
-import hyperplane_computation.utils as utils
-
+import utils
 import pandas as pd
 eos_token = '<|endoftext|>'
 

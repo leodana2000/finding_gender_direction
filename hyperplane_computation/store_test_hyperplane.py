@@ -3,8 +3,8 @@
 
 import torch
 from tqdm import tqdm
+from .hyperplane_computation import utils
 from concept_erasure import leace #to change
-import utils
 from sklearn.linear_model import LogisticRegression
 
 def storing_hyperplanes(dataset : list[list], post_layer_norm = True, **dict):
@@ -93,13 +93,12 @@ def storing_hyperplanes(dataset : list[list], post_layer_norm = True, **dict):
       ))
 
   #Deletion of all the useless tensor to avoid RAM overload.
-
       del probe
-    del leace_fitter
-    del eraser
-    del target_activations
-    del all_target_act
-    del all_labels
+  del leace_fitter
+  del eraser
+  del target_activations
+  del all_target_act
+  del all_labels
   del activations
   del indices
   del labels

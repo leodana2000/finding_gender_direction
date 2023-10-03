@@ -1,7 +1,6 @@
 #code to generate de test data
 
 import pandas as pd
-import csv
 import utils
 
 D2 = pd.read_csv('finding_gender_direction/yob1880.csv')
