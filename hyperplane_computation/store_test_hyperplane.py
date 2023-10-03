@@ -3,7 +3,7 @@
 
 import torch
 from tqdm import tqdm
-from .hyperplane_computation import utils
+from hyperplane_computation import utils
 from concept_erasure import leace #to change
 from sklearn.linear_model import LogisticRegression
 
