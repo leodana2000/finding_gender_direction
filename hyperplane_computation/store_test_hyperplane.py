@@ -126,7 +126,7 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
 
 
 
-def hyperplane_acc(examples : list[list[str]], eval_metric : list[function], **dict) -> list[list[float]]:
+def hyperplane_acc(examples : list[list[str]], eval_metric : list, **dict) -> list[list[float]]:
   device = dict['device']
   model = dict['model']
   tokenizer = dict['tokenizer']
