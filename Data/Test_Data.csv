@@ -1,849 +1,849 @@
 ,question,data_num,target
 0,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The young lady is talented and is a musician. Answer:",a, lady
 1,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The actress is skilled and performed flawlessly. Answer:",a, actress
 2,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The daughter is intelligent and loves to read. Answer:",a, daughter
 3,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The bride is stunning and chose a beautiful gown. Answer:",a, bride
 4,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The princess is kind-hearted and helps others. Answer:",a, princess
 5,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The girl is diligent and scored top grades. Answer:",a, girl
 6,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The mother is caring and always puts family first. Answer:",a, mother
 7,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The princess is determined and trains tirelessly. Answer:",a, princess
 8,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Their mother is creative and invents unique recipes. Answer:",a, mother
 9,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The grandmother is wise and shares valuable stories. Answer:",a, grandmother
 10,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The lady is fashionable and has a great sense of style. Answer:",a, lady
 11,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The queen is powerful and rules with authority. Answer:",a, queen
 12,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The aunt is nurturing and takes care of the children. Answer:",a, aunt
 13,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The heroine is brave and faces danger without fear. Answer:",a, heroine
 14,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The woman is confident and speaks loud. Answer:",a, woman
 15,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The female CEO is successful and leads the company to prosperity. Answer:",a, female
 16,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The girl is imaginative and creates fantastic stories. Answer:",a, girl
 17,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The young lady is talented and is a musician. Answer:",a, lady
 18,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The actress is skilled and performed flawlessly. Answer:",a, actress
 19,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The daughter is intelligent and loves to read. Answer:",a, daughter
 20,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The bride is stunning and chose a beautiful gown. Answer:",a, bride
 21,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The princess is kind-hearted and helps others. Answer:",a, princess
 22,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The girl is diligent and scored top grades. Answer:",a, girl
 23,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The mother is caring and always puts family first. Answer:",a, mother
 24,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The princess is determined and trains tirelessly. Answer:",a, princess
 25,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Their mother is creative and invents unique recipes. Answer:",a, mother
 26,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The grandmother is wise and shares valuable stories. Answer:",a, grandmother
 27,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The lady is fashionable and has a great sense of style. Answer:",a, lady
 28,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The queen is powerful and rules with authority. Answer:",a, queen
 29,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The aunt is nurturing and takes care of the children. Answer:",a, aunt
 30,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The heroine is brave and faces danger without fear. Answer:",a, heroine
 31,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The woman is confident and speaks loud. Answer:",a, woman
 32,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The female CEO is successful and leads the company to prosperity. Answer:",a, female
 33,"<|endoftext|>The task is to predict the gender of the character in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The girl is imaginative and creates fantastic stories. Answer:",a, girl
 34,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The young lord is talented. Answer:",b, lord
 35,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The actor is skilled. Answer:",b, actor
 36,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The son is intelligent. Answer:",b, son
 37,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The prince is kind-hearted. Answer:",b, prince
 38,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The boy is diligent. Answer:",b, boy
 39,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The father is caring. Answer:",b, father
 40,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The prince is determined. Answer:",b, prince
 41,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Their father is creative. Answer:",b, father
 42,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The grandfather is wise. Answer:",b, grandfather
 43,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The king is powerful. Answer:",b, king
 44,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The hero is brave and has no fear. Answer:",b, hero
 45,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The man is confident and speaks loud. Answer:",b, man
 46,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The male CEO is successful and leads the company to prosperity. Answer:",b, male
 47,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  The boy is imaginative and creates fantastic stories. Answer:",b, boy
 48,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The young lord is talented. Answer:",b, lord
 49,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The actor is skilled. Answer:",b, actor
 50,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The son is intelligent. Answer:",b, son
 51,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The prince is kind-hearted. Answer:",b, prince
 52,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The boy is diligent. Answer:",b, boy
 53,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The father is caring. Answer:",b, father
 54,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The prince is determined. Answer:",b, prince
 55,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Their father is creative. Answer:",b, father
 56,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The grandfather is wise. Answer:",b, grandfather
 57,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The king is powerful. Answer:",b, king
 58,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The hero is brave and has no fear. Answer:",b, hero
 59,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The man is confident and speaks loud. Answer:",b, man
 60,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The male CEO is successful and leads the company to prosperity. Answer:",b, male
 61,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  The boy is imaginative and creates fantastic stories. Answer:",b, boy
 62,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Estella. Answer:",c, Estella
 63,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Susan. Answer:",c, Susan
 64,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Lenna. Answer:",c, Lenna
 65,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Mina. Answer:",c, Mina
 66,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Claire. Answer:",c, Claire
 67,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Alma. Answer:",c, Alma
 68,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Elizabeth. Answer:",c, Elizabeth
 69,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Rosie. Answer:",c, Rosie
 70,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Lona. Answer:",c, Lona
 71,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Rosetta. Answer:",c, Rosetta
 72,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Augusta. Answer:",c, Augusta
 73,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Isabella. Answer:",c, Isabella
 74,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Jannie. Answer:",c, Jannie
 75,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Adaline. Answer:",c, Adaline
 76,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Irene. Answer:",c, Irene
 77,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Artie. Answer:",c, Artie
 78,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Florence. Answer:",c, Florence
 79,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Adella. Answer:",c, Adella
 80,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Selma. Answer:",c, Selma
 81,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Anne. Answer:",c, Anne
 82,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Theresa. Answer:",c, Theresa
 83,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Daisy. Answer:",c, Daisy
 84,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Martha. Answer:",c, Martha
 85,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Laura. Answer:",c, Laura
 86,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Phoebe. Answer:",c, Phoebe
 87,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Miriam. Answer:",c, Miriam
 88,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Edna. Answer:",c, Edna
 89,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Nona. Answer:",c, Nona
 90,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Madeline. Answer:",c, Madeline
 91,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Katherine. Answer:",c, Katherine
 92,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Etta. Answer:",c, Etta
 93,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Pauline. Answer:",c, Pauline
 94,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Delia. Answer:",c, Delia
 95,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Inez. Answer:",c, Inez
 96,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Ella. Answer:",c, Ella
 97,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Mamie. Answer:",c, Mamie
 98,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is Elisabeth. Answer:",c, Elisabeth
 99,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Estella. Answer:",c, Estella
 100,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Susan. Answer:",c, Susan
 101,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Lenna. Answer:",c, Lenna
 102,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Mina. Answer:",c, Mina
 103,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Claire. Answer:",c, Claire
 104,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Alma. Answer:",c, Alma
 105,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Elizabeth. Answer:",c, Elizabeth
 106,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Rosie. Answer:",c, Rosie
 107,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Lona. Answer:",c, Lona
 108,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Rosetta. Answer:",c, Rosetta
 109,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Augusta. Answer:",c, Augusta
 110,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Isabella. Answer:",c, Isabella
 111,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Jannie. Answer:",c, Jannie
 112,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Adaline. Answer:",c, Adaline
 113,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Irene. Answer:",c, Irene
 114,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Artie. Answer:",c, Artie
 115,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Florence. Answer:",c, Florence
 116,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Adella. Answer:",c, Adella
 117,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Selma. Answer:",c, Selma
 118,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Anne. Answer:",c, Anne
 119,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Theresa. Answer:",c, Theresa
 120,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Daisy. Answer:",c, Daisy
 121,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Martha. Answer:",c, Martha
 122,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Laura. Answer:",c, Laura
 123,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Phoebe. Answer:",c, Phoebe
 124,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Miriam. Answer:",c, Miriam
 125,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Edna. Answer:",c, Edna
 126,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Nona. Answer:",c, Nona
 127,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Madeline. Answer:",c, Madeline
 128,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Katherine. Answer:",c, Katherine
 129,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Etta. Answer:",c, Etta
 130,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Pauline. Answer:",c, Pauline
 131,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Delia. Answer:",c, Delia
 132,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Inez. Answer:",c, Inez
 133,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Ella. Answer:",c, Ella
 134,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Mamie. Answer:",c, Mamie
 135,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is Elisabeth. Answer:",c, Elisabeth
 136,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 137,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is G. Answer:",d, G
 138,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 139,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is H. Answer:",d, H
 140,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is A. Answer:",d, A
 141,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is L. Answer:",d, L
 142,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is A. Answer:",d, A
 143,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is C. Answer:",d, C
 144,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 145,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is L. Answer:",d, L
 146,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 147,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is E. Answer:",d, E
 148,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is W. Answer:",d, W
 149,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 150,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 151,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is D. Answer:",d, D
 152,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 153,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is A. Answer:",d, A
 154,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is L. Answer:",d, L
 155,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is I. Answer:",d, I
 156,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is E. Answer:",d, E
 157,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is F. Answer:",d, F
 158,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is H. Answer:",d, H
 159,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is A. Answer:",d, A
 160,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is S. Answer:",d, S
 161,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 162,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is N. Answer:",d, N
 163,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is M. Answer:",d, M
 164,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is F. Answer:",d, F
 165,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is L. Answer:",d, L
 166,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is E. Answer:",d, E
 167,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is C. Answer:",d, C
 168,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is N. Answer:",d, N
 169,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is F. Answer:",d, F
 170,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is J. Answer:",d, J
 171,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is W. Answer:",d, W
 172,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is B. Answer:",d, B
 173,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  He is a boy. Answer: male 
  Hi, my name is C. Answer:",d, C
 174,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 175,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is G. Answer:",d, G
 176,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 177,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is H. Answer:",d, H
 178,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is A. Answer:",d, A
 179,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is L. Answer:",d, L
 180,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is A. Answer:",d, A
 181,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is C. Answer:",d, C
 182,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 183,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is L. Answer:",d, L
 184,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 185,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is E. Answer:",d, E
 186,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is W. Answer:",d, W
 187,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 188,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 189,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is D. Answer:",d, D
 190,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 191,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is A. Answer:",d, A
 192,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is L. Answer:",d, L
 193,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is I. Answer:",d, I
 194,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is E. Answer:",d, E
 195,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is F. Answer:",d, F
 196,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is H. Answer:",d, H
 197,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is A. Answer:",d, A
 198,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is S. Answer:",d, S
 199,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 200,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is N. Answer:",d, N
 201,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is M. Answer:",d, M
 202,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is F. Answer:",d, F
 203,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is L. Answer:",d, L
 204,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is E. Answer:",d, E
 205,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is C. Answer:",d, C
 206,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is N. Answer:",d, N
 207,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is F. Answer:",d, F
 208,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is J. Answer:",d, J
 209,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is W. Answer:",d, W
 210,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is B. Answer:",d, B
 211,"<|endoftext|>The task is to predict the gender of the caracter in the following sentences. Answer only using the word 'female' or 'male'. 
  He is a boy. Answer: male 
- She is a girl. Answer female 
+ She is a girl. Answer: female 
  Hi, my name is C. Answer:",d, C

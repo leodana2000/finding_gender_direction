@@ -77,6 +77,7 @@ Train_m_1 = []
 Train_f_1 = []
 Test_m_1 = []
 Test_f_1 = []
+len_list = []
 
 for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
   Train_m, Test_m = utils.split_list(d1_m)
@@ -87,18 +88,19 @@ for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
   Test_m = utils.concat_list([[eos_token + prpt + word for word in Test_m] for prpt in prompt])
   Test_f = utils.concat_list([[eos_token + prpt + word for word in Test_f] for prpt in prompt])
 
+  len_list.append([len(Train_m), len(Train_f), len(Test_m), len(Test_f)])
+
   Train_m_1 += Train_m
   Train_f_1 += Train_f
   Test_m_1 += Test_m
   Test_f_1 += Test_f
 
-print(Train_m_1)
 #Creation of the dataset D2: it contains gendered names.
 #There is a total of ~750 distinct names.
 #They are embedded into different prompts.
 #Executing the file gives the amount of final example for each classes.
 
-D2 = pd.read_csv("finding_gender_direction/yob1880.csv")
+D2 = pd.read_csv("Data/yob1880.csv")
 threshold = 20
 D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
 D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
@@ -118,16 +120,17 @@ Train_f_2 = utils.concat_list([[eos_token + prpt + word for word in Train_f] for
 Test_m_2 = utils.concat_list([[eos_token + prpt + word for word in Test_m] for prpt in prompt_m])
 Test_f_2 = utils.concat_list([[eos_token + prpt + word for word in Test_f] for prpt in prompt_f])
 
-data_num = [1]*len(Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1) + [2]*len(Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2)
+examples = Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1 + Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2
+data_lbl = ['pronoun']*len_list[0][0] + ['noun']*len_list[1][0] + ['anatomy']*len_list[2][0] + ['pronoun']*len_list[0][1] + ['noun']*len_list[1][1] + ['anatomy']*len_list[2][1] + ['pronoun']*len_list[0][2] + ['noun']*len_list[1][2] + ['anatomy']*len_list[2][2] + ['pronoun']*len_list[0][3] + ['noun']*len_list[1][3] + ['anatomy']*len_list[2][3] + ['name']*len(Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2)
 gender = [1]*len(Train_m_1) + [-1]*len(Train_f_1) + [1]*len(Test_m_1) + [-1]*len(Test_f_1) + [1]*len(Train_m_2) + [-1]*len(Train_f_2) + [1]*len(Test_m_2) + [-1]*len(Test_f_2)
 train = [1]*len(Train_m_1 + Train_f_1) + [0]*len(Test_m_1 + Test_f_1) + [1]*len(Train_m_2 + Train_f_2) + [0]*len(Test_m_2 + Test_f_2)
 
 D = {
-  'examples': Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1 + Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2,
-  'data_num': data_num,
+  'examples': examples,
+  'data_lbl': data_lbl,
   'gender': gender,
   'train': train,
   }
 
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
-pd.DataFrame.to_csv(DF, "finding_gender_direction/Train_Data.csv", quotechar='"')
+pd.DataFrame.to_csv(DF, "Data/Train_Data.csv", quotechar='"')
