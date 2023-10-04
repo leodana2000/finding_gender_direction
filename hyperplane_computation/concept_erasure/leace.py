@@ -1,14 +1,13 @@
+#simplified version of the leace method
+
 from dataclasses import dataclass
 from typing import Literal
 
 import torch
 from torch import Tensor
 
-#import sys
-#sys.path.append("C:\\Users\\léo\\Desktop\\Travail\\Informatique\\GitHub\\finding_gender_direction")
-
-from hyperplane_computation.concept_erasure.caching import cached_property, invalidates_cache
-from hyperplane_computation.concept_erasure.shrinkage import optimal_linear_shrinkage
+from finding_gender_direction.hyperplane_computation.concept_erasure.caching import cached_property, invalidates_cache
+from finding_gender_direction.hyperplane_computation.concept_erasure.shrinkage import optimal_linear_shrinkage
 
 ErasureMethod = Literal["leace", "orth"]
 
@@ -26,27 +25,18 @@ class LeaceEraser:
     proj_right: Tensor
     bias: Tensor | None
 
-    @classmethod
-    def fit(cls, x: Tensor, z: Tensor, **kwargs) -> "LeaceEraser":
-        """Convenience method to fit a LeaceEraser on data and return it."""
-        return LeaceFitter.fit(x, z, **kwargs).eraser
+    def to(self, device) -> None:
+        """Changes the device of the tensors."""
+        self.proj_left = self.proj_left.to(device)
+        self.proj_right = self.proj_right.to(device)
+        self.bias = self.bias.to(device)
 
-    @property
-    def P(self) -> Tensor:
-        """The projection matrix."""
-        eye = torch.eye(
-            self.proj_left.shape[0],
-            device=self.proj_left.device,
-            dtype=self.proj_left.dtype,
-        )
-        return eye - self.proj_left @ self.proj_right
-
-    def __call__(self, x: Tensor) -> Tensor:
+    def __call__(self, x: Tensor, lbd : float) -> Tensor:
         """Apply the projection to the input tensor."""
         delta = x - self.bias if self.bias is not None else x
 
         # Ensure we do the matmul in the most efficient order.
-        x_ = x - (delta @ self.proj_right.mH) @ self.proj_left.mH
+        x_ = x - lbd*(delta @ self.proj_right.mH) @ self.proj_left.mH
         return x_.type_as(x)
 
 
