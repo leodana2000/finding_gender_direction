@@ -3,7 +3,7 @@
 
 import torch
 from tqdm import tqdm
-import utils
+from finding_gender_direction.hyperplane_computation import utils
 
 
 #Fast way to compute the probability for any nb_tokens but only when the tokens are of length one.

@@ -5,8 +5,8 @@ import torch
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 
-import utils
-from concept_erasure import leace
+from finding_gender_direction.hyperplane_computation import utils
+from finding_gender_direction.hyperplane_computation.concept_erasure import leace
 
 Gender = int #1 for male, -1 for female
 Label = str #The label is either 'noun', 'pronoun', 'name', or 'anatomy'.
@@ -89,16 +89,13 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
     quantile = utils.get_quantile(eraser, all_target_act).unsqueeze(0)
 
     #ToDo: Update LEACE
-    eraser_mean.append(leace.LeaceEraser(
-        proj_right = eraser.proj_right.to(device),
-        proj_left = eraser.proj_left.to(device),
-        bias = eraser.bias.to(device),
-    ))
+    eraser_mean.append(eraser.to(device))
     eraser_quantile.append(leace.LeaceEraser(
-        proj_right = eraser.proj_right.to(device),
-        proj_left = eraser.proj_left.to(device),
-        bias = quantile.to(device),
+        proj_right = eraser.proj_right,
+        proj_left = eraser.proj_left,
+        bias = quantile,
     ))
+    eraser_quantile[-1].to(device)
 
     #We learn the best LogisticRegression, we need at least 1500 steps to converge
     if post_layer_norm:
@@ -108,10 +105,11 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
               )
 
       eraser_probe.append(leace.LeaceEraser(
-          proj_right = torch.Tensor(probe.coef_).to(device),
-          proj_left = ((torch.Tensor(probe.coef_)/(torch.norm(torch.Tensor(probe.coef_), dim = -1)**2).unsqueeze(-1)).T).to(device),
-          bias = -probe.intercept_[0]*(torch.Tensor(probe.coef_)/(torch.norm(torch.Tensor(probe.coef_), dim = -1).unsqueeze(-1)**2)).to(device),
+          proj_right = torch.Tensor(probe.coef_),
+          proj_left = ((torch.Tensor(probe.coef_)/(torch.norm(torch.Tensor(probe.coef_), dim = -1)**2).unsqueeze(-1)).T),
+          bias = -probe.intercept_[0]*(torch.Tensor(probe.coef_)/(torch.norm(torch.Tensor(probe.coef_), dim = -1).unsqueeze(-1)**2)),
       ))
+      eraser_probe[-1].to(device)
 
   #Deletion of all the useless tensor to avoid RAM overload.
       del probe
