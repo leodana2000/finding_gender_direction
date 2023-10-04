@@ -11,7 +11,7 @@ from finding_gender_direction.hyperplane_computation.concept_erasure import leac
 Gender = int #1 for male, -1 for female
 Label = str #The label is either 'noun', 'pronoun', 'name', or 'anatomy'.
 
-def process_labels(label : Label, gender : Gender):
+def process_labels(gender : Gender, label : Label):
   '''
   Prepares the label to be feed into the concept_erasure module.
   '''
