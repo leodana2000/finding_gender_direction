@@ -3,14 +3,15 @@
 
 import torch
 from tqdm import tqdm
-from hyperplane_computation import utils
-from concept_erasure import leace #to change
 from sklearn.linear_model import LogisticRegression
+
+import utils
+from concept_erasure import leace
 
 Gender = int #1 for male, -1 for female
 Label = str #The label is either 'noun', 'pronoun', 'name', or 'anatomy'.
 
-def process_labels(label : str, gender : Gender):
+def process_labels(label : Label, gender : Gender):
   '''
   Prepares the label to be feed into the concept_erasure module.
   '''
@@ -31,20 +32,22 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
 
 
   #To save the RAM, we need to compute by batch
+  indices = []
+  activations = []
+  labels = []
   N_batch = len(dataset)
+  for batch in dataset:
 
-  #We keep track the length of each prompt to find the right indices on which to measure the probability.
-  indices = [torch.Tensor([len(tokenizer(data[0])["input_ids"])-1 for data in batch]).to(int).to(device) for batch in dataset]
+    #We keep track the length of each prompt to find the right indices on which to measure the probability.
+    indices.append(torch.Tensor([len(tokenizer(data[0])["input_ids"])-1 for data in batch]).to(int).to(device))
 
-  #We tokenize per batches
-  tokenized_data = [tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device) for batch in dataset]
-  positions = [torch.Tensor([i for i in range(tokenized_batch.shape[1])]).to(int).to(device) for tokenized_batch in tokenized_data]
+    #initiate activations
+    tokenized_batch = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
+    positions = torch.Tensor([i for i in range(tokenized_batch.shape[1])]).to(int).to(device)
+    activations.append(model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions))
+    labels.append(torch.Tensor([process_labels(data[1], data[2]) for data in batch]).unsqueeze(-1))
 
-  #We initialise our tensors for each dataset
-  activations = [model.transformer.wte(tokenized_batch) + model.transformer.wpe(position) for tokenized_batch, position in zip(tokenized_data, positions)]
-  labels = [torch.Tensor([process_labels(data[1], data[2]) for data in batch]).unsqueeze(-1) for batch in dataset]
-
-  del tokenized_data
+  del tokenized_batch
   del positions
 
   dim_label = labels[0][0].shape[1]
@@ -59,19 +62,19 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
     leace_fitter = leace.LeaceFitter(dim_residual, dim_label)
 
     target_activations = []
-    for i in range(N_batch):
+    for batch_num in range(N_batch):
 
       #We update each activation through the next layer.
       if layer != 0:
-        activations[i] = model.transformer.h[layer](activations[i])[0]
+        activations[batch_num] = model.transformer.h[layer](activations[batch_num])[0]
 
       #We choose the activation of the targeted tokens and fit the leace estimator.
       if post_layer_norm:
-        acts = model.transformer.h[layer].ln_1(activations[i])
+        acts = model.transformer.h[layer].ln_1(activations[batch_num])
       else:
-        acts = activations[i]
+        acts = activations[batch_num]
 
-      target_activations.append(torch.cat([act[ind].unsqueeze(0) for act, ind in zip(acts, indices[i])], dim = 0).to(device))
+      target_activations.append(torch.cat([act[ind].unsqueeze(0) for act, ind in zip(acts, indices[batch_num])], dim = 0).to(device))
       del acts
 
     all_target_act = torch.cat(target_activations, dim = 0)
@@ -139,7 +142,7 @@ def hyperplane_acc(examples : list[list[str]], eval_metric : list[function], **d
 
     #initiate the activations
     tokenized_data = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
-    positions = torch.arange(tokenized_data.shape[1]).to(int).to(device))
+    positions = torch.arange(tokenized_data.shape[1]).to(int).to(device)
     activations.append(model.transformer.wte(tokenized_data) + model.transformer.wpe(positions))
 
   del tokenized_data

@@ -2,9 +2,8 @@
 #you can use it directly in the notebook, or anywhere else : the only function to call is fast_score
 
 import torch
-from hyperplane_computation import utils
 from tqdm import tqdm
-
+import utils
 
 
 #Fast way to compute the probability for any nb_tokens but only when the tokens are of length one.
@@ -167,7 +166,7 @@ def attn_forward(module,
 def hook_wte(lbd, stream_indices, example_indices):
   def meta_hook(leace_eraser):
     def hook(module, input):
-      input[0][example_indices, stream_indices] -= lbd*leace_eraser.proj_left.T*((input[0][example_indices, stream_indices]-leace_eraser.bias)@leace_eraser.proj_right.T)
+      input[0][example_indices, stream_indices] = leace_eraser(input[0][example_indices, stream_indices], lbd)
       return input
     return hook
   return meta_hook
