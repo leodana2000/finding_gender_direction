@@ -50,8 +50,8 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
   del tokenized_batch
   del positions
 
-  dim_label = labels[0][0].shape[-1]
-  dim_residual = activations[0][0].shape[-1]
+  dim_label = labels[0].shape[1]
+  dim_residual = activations[0].shape[-1]
 
   eraser_mean = []
   eraser_quantile = []
@@ -86,7 +86,7 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
     del leace_fitter
 
     #We compute the quantile to have the equal-leace estimator.
-    quantile = utils.get_quantile(eraser, all_target_act).unsqueeze(0)
+    quantile = utils.get_quantile(eraser, all_target_act, **dict).unsqueeze(0)
 
     #ToDo: Update LEACE
     eraser_mean.append(eraser.to(device))
@@ -99,7 +99,9 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
 
     #We learn the best LogisticRegression, we need at least 1500 steps to converge
     if post_layer_norm:
-      probe = LogisticRegression(random_state=0, max_iter=2000).fit(
+      #probe_labels = transform_label(all_labels)
+
+      probe = LogisticRegression(random_state=0, max_iter=2000, multi_class='multinomial').fit(
               all_target_act.to('cpu'),
               all_labels.to('cpu')
               )

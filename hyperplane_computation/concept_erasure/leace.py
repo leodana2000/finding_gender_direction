@@ -27,9 +27,11 @@ class LeaceEraser:
 
     def to(self, device) -> None:
         """Changes the device of the tensors."""
-        self.proj_left = self.proj_left.to(device)
-        self.proj_right = self.proj_right.to(device)
-        self.bias = self.bias.to(device)
+        return LeaceEraser(
+            self.proj_left.to(device),
+            self.proj_right.to(device),
+            self.bias.to(device),
+        )
 
     def __call__(self, x: Tensor, lbd : float) -> Tensor:
         """Apply the projection to the input tensor."""

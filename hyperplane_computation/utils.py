@@ -7,7 +7,8 @@ cosim = torch.nn.CosineSimilarity(-1)
 
 
 #ToDo: Implement a better version, using means of median
-def get_quantile(leace_eraser, target_activations):
+def get_quantile(leace_eraser, target_activations, **dict):
+  device = dict['device']
   #We compute the parameters of the hyperplane to project against.
   hyperplane = (leace_eraser.proj_right[0]/torch.norm(leace_eraser.proj_right[0], dim = -1).unsqueeze(-1)).squeeze().to(device)
 
