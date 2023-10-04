@@ -50,7 +50,7 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
   del tokenized_batch
   del positions
 
-  dim_label = labels[0][0].shape[1]
+  dim_label = labels[0][0].shape[-1]
   dim_residual = activations[0][0].shape[-1]
 
   eraser_mean = []
