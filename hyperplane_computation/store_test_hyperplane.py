@@ -5,8 +5,8 @@ import torch
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 
-from finding_gender_direction.hyperplane_computation import utils
-from finding_gender_direction.hyperplane_computation.concept_erasure import leace
+from hyperplane_computation import utils
+from hyperplane_computation.concept_erasure import leace
 
 Gender = int #1 for male, -1 for female
 Label = str #The label is either 'noun', 'pronoun', 'name', or 'anatomy'.

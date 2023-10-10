@@ -6,8 +6,8 @@ from typing import Literal
 import torch
 from torch import Tensor
 
-from finding_gender_direction.hyperplane_computation.concept_erasure.caching import cached_property, invalidates_cache
-from finding_gender_direction.hyperplane_computation.concept_erasure.shrinkage import optimal_linear_shrinkage
+from hyperplane_computation.concept_erasure.caching import cached_property, invalidates_cache
+from hyperplane_computation.concept_erasure.shrinkage import optimal_linear_shrinkage
 
 ErasureMethod = Literal["leace", "orth"]
 
