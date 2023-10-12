@@ -8,47 +8,15 @@ from sklearn.linear_model import LogisticRegression
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure import leace
 
-Gender = int #1 for male, -1 for female
-Label = str #The label is either 'noun', 'pronoun', 'name', or 'anatomy'.
 
-def process_labels(gender : Gender, label : Label):
-  '''
-  Prepares the label to be feed into the concept_erasure module.
-  '''
-  if label == 'noun':
-    return [gender, 0, 0, 0]
-  elif label == 'pronoun':
-    return [0, gender, 0, 0]
-  elif label == 'name':
-    return [0, 0, 0, gender]
-  else:
-    return [0, 0, gender, 0]
-
-
-def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_norm = True, **dict):
+def storing_hyperplanes(dataset : list[list[str, utils.Label, utils.Gender]], post_layer_norm = True, **dict):
   device = dict['device']
   model = dict['model']
-  tokenizer = dict['tokenizer']
 
-
-  #To save the RAM, we need to compute by batch
-  indices = []
-  activations = []
-  labels = []
   N_batch = len(dataset)
-  for batch in dataset:
 
-    #We keep track the length of each prompt to find the right indices on which to measure the probability.
-    indices.append(torch.Tensor([len(tokenizer(data[0])["input_ids"])-1 for data in batch]).to(int).to(device))
-
-    #initiate activations
-    tokenized_batch = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
-    positions = torch.Tensor([i for i in range(tokenized_batch.shape[1])]).to(int).to(device)
-    activations.append(model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions))
-    labels.append(torch.Tensor([process_labels(data[1], data[2]) for data in batch]).unsqueeze(-1))
-
-  del tokenized_batch
-  del positions
+  indices, activations, labels = utils.initiate_activations(dataset, **dict)
+  all_labels = torch.cat(labels, dim = 0).squeeze()
 
   dim_label = labels[0].shape[1]
   dim_residual = activations[0].shape[-1]
@@ -61,24 +29,9 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
     #Initiating the leace estimator, default parameters.
     leace_fitter = leace.LeaceFitter(dim_residual, dim_label)
 
-    target_activations = []
-    for batch_num in range(N_batch):
-
-      #We update each activation through the next layer.
-      if layer != 0:
-        activations[batch_num] = model.transformer.h[layer](activations[batch_num])[0]
-
-      #We choose the activation of the targeted tokens and fit the leace estimator.
-      if post_layer_norm:
-        acts = model.transformer.h[layer].ln_1(activations[batch_num])
-      else:
-        acts = activations[batch_num]
-
-      target_activations.append(torch.cat([act[ind].unsqueeze(0) for act, ind in zip(acts, indices[batch_num])], dim = 0).to(device))
-      del acts
+    activations, target_activations = utils.gather_update_acts(activations, layer, post_layer_norm, indices, N_batch, **dict)
 
     all_target_act = torch.cat(target_activations, dim = 0)
-    all_labels = torch.cat(labels, dim = 0).squeeze()
     leace_fitter.update(all_target_act, all_labels)
 
     #We only keep the eraser. The rest is not useful anymore.
@@ -95,15 +48,16 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
         proj_left = eraser.proj_left,
         bias = quantile,
     ))
+    del eraser
     eraser_quantile[-1].to(device)
 
-    #We learn the best LogisticRegression, we need at least 1500 steps to converge
+    #Only recognize the gender direction
     if post_layer_norm:
-      #probe_labels = transform_label(all_labels)
+      probe_labels = torch.sum(all_labels, dim=-1)
 
-      probe = LogisticRegression(random_state=0, max_iter=2000, multi_class='multinomial').fit(
+      probe = LogisticRegression(random_state=0, max_iter=2000,).fit(
               all_target_act.to('cpu'),
-              all_labels.to('cpu')
+              probe_labels.to('cpu')
               )
 
       eraser_probe.append(leace.LeaceEraser(
@@ -115,69 +69,44 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
 
   #Deletion of all the useless tensor to avoid RAM overload.
       del probe
-  del eraser
-  del target_activations
-  del all_target_act
+    del target_activations
+    del all_target_act
   del all_labels
   del activations
   del indices
   del labels
-  del positions
 
   return eraser_mean, eraser_quantile, eraser_probe
 
 
 
-def hyperplane_acc(examples : list[list[str]], eval_metric : list, **dict) -> list[list[float]]:
+def hyperplane_acc(dataset : list[list[str, utils.Label, utils.Gender]], eval_metric : list, **dict) -> list[list[float]]:
   device = dict['device']
   model = dict['model']
-  tokenizer = dict['tokenizer']
 
-  indices_list = []
-  activations = []
-  for batch in examples:
+  N_batch = len(dataset)
 
-    #we keep track of the lenght of the prompt to find the right token to read the probability
-    indices_list.append(torch.Tensor([len(tokenizer(data[0])["input_ids"])-1 for data in batch]).to(int))
+  indices, activations, labels = utils.initiate_activations(dataset, **dict)
 
-    #initiate the activations
-    tokenized_data = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
-    positions = torch.arange(tokenized_data.shape[1]).to(int).to(device)
-    activations.append(model.transformer.wte(tokenized_data) + model.transformer.wpe(positions))
-
-  del tokenized_data
-  del positions
-
-  all_labels = torch.cat(
-      [torch.Tensor([data[1] for data in batch]).unsqueeze(-1) for batch in examples]
-      , dim = 0
-  ).squeeze().to(device)
+  all_labels = torch.cat(labels).squeeze().to(device)
 
   acc_list = []
   for layer in tqdm(range(len(model.transformer.h))):
 
-    target_activations = []
-    for batch_num in range(len(activations)):
+    activations, target_activations = utils.gather_update_acts(activations, layer, True, indices, N_batch, **dict)
 
-      #we propagade forward through the next layer
-      if layer != 0:
-        activations[batch_num] = model.transformer.h[layer](activations[batch_num])[0]
-
-      #we store all of the activations
-      target_activations.append(torch.cat([
-        act[ind].unsqueeze(0) for act, ind in zip(model.transformer.h[layer].ln_1(activations[batch_num]), indices_list[batch_num])
-        ], dim = 0).to(device))
-    all_target_act = torch.cat(target_activations, dim = 0).to(device)
+    all_target_acts = torch.cat(target_activations, dim = 0).to(device)
 
     #at this layer, we evaluate the accuracy of all of the metrics
     acc = []
     for metric in eval_metric:
-      acc.append(metric(all_target_act, layer, all_labels))
+      acc.append(metric(all_target_acts, layer, all_labels))
     acc_list.append(acc)
 
   del activations
-  del indices_list
-  del all_target_act
+  del indices
+  del labels
+  del all_target_acts
   del all_labels
 
   #invert dim 0 and 1 to have [metric, layer]

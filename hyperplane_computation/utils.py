@@ -4,7 +4,72 @@ import torch
 device = "cuda"
 cosim = torch.nn.CosineSimilarity(-1)
 
+Gender = 1 | -1 #1 for male, -1 for female
+Label = str #'noun' | 'pronoun' |'name' | 'anatomy'
 
+
+def process_labels(gender : Gender, label : Label):
+  '''
+  Prepares the label to be fed into the concept_erasure module.
+  '''
+  if label == 'noun':
+    return [gender, 0, 0, 0]
+  elif label == 'pronoun':
+    return [0, gender, 0, 0]
+  elif label == 'name':
+    return [0, 0, 0, gender]
+  else:
+    return [0, 0, gender, 0]
+
+
+def initiate_activations(dataset, with_label = True, **dict):
+  device = dict['device']
+  model = dict['model']
+  tokenizer = dict['tokenizer']
+
+  indices = []
+  activations = []
+  labels = []
+
+  for batch in dataset:
+    #We keep track the length of each prompt to find the right indices on which to measure the probability.
+    indices.append(torch.Tensor([len(tokenizer(data[0])["input_ids"])-1 for data in batch]).to(int).to(device))
+
+    #initiate activations
+    tokenized_batch = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
+    positions = torch.Tensor([i for i in range(tokenized_batch.shape[1])]).to(int).to(device)
+    activations.append(model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions))
+    if with_label:
+      labels.append(torch.Tensor([process_labels(data[1], data[2]) for data in batch]).unsqueeze(-1))
+  
+  #Deletion of all the useless tensor to avoid RAM overload.
+  del positions
+  del tokenized_batch
+
+  return indices, activations, labels
+
+
+def gather_update_acts(activations, layer, post_layer_norm, indices, N_batch, **dict):
+  model = dict['model']
+  device = dict['device']
+
+  target_activations = []
+  for batch_num in range(N_batch):
+
+    #We update each activation through the next layer.
+    if layer != 0:
+      activations[batch_num] = model.transformer.h[layer](activations[batch_num])[0]
+
+    #We choose the activation of the targeted tokens and fit the leace estimator.
+    if post_layer_norm:
+      acts = model.transformer.h[layer].ln_1(activations[batch_num])
+    else:
+      acts = activations[batch_num]
+
+    target_activations.append(torch.cat([act[ind].unsqueeze(0) for act, ind in zip(acts, indices[batch_num])], dim = 0).to(device))
+    del acts
+  
+  return activations, target_activations
 
 #ToDo: Implement a better version, using means of median
 def get_quantile(leace_eraser, target_activations, **dict):
@@ -66,8 +131,7 @@ def show_proba(proba, tokenizer, level = 0.01, nb_tokens = 10, decode = False):
 
 
 
-#Finds the occurences of the target inside the examples,
-#but only the last one for each target.
+#Finds the occurences of the target inside the examples, but only the last one for each target.
 def finds_indices(example_tokens, target_tokens):
 
   #stream_indice is the list of all streams where the target was detected
