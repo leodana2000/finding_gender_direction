@@ -30,6 +30,7 @@ class DataStorage:
             for i, name in enumerate(self.label_names):
                 if label == name:
                     dim_label[i] = valence
+            dim_labels.append(dim_label)
 
         self.dim_labels = dim_labels
 
@@ -40,7 +41,7 @@ class DataStorage:
         '''
         random.seed(self.rand_seed)
         nb_data = len(self.sentences)
-        nb_train = (self.train_test_ratio*nb_data)//1
+        nb_train = int(self.train_test_ratio*nb_data)
         self.is_training = [True]*nb_train + [False]*(nb_data - nb_train)
         random.shuffle(self.is_training)
 
@@ -65,18 +66,19 @@ class DataStorage:
         return [list[i*self.batch_size:min((i+1)*self.batch_size, Nb_ex)] for i in range(Nb_batch)]
 
 
-    def get_ex(self, method) -> list[list[str]]:
+    def get_ex(self, method, multi_dim=True) -> list[list[str, list[int]]]:
         '''
         Returns the batched data to train, test, or learn. 
         Learning takes every example to learn the directions.
         Train and Test splits the data 
         '''
+        labels = self.get_labels(multi_dim=multi_dim)
         if method == 'train':
-            examples = [sentence for sentence, is_train in zip(self.sentences, self.is_training) if is_train]
+            examples = [[sentence, label] for sentence, label, is_train in zip(self.sentences, labels, self.is_training) if is_train]
         elif method == 'test':
-            examples = [sentence for sentence, is_learn in zip(self.sentences, self.is_learning) if not is_learn]
+            examples = [[sentence, label] for sentence, label, is_learn in zip(self.sentences, labels, self.is_learning) if not is_learn]
         elif method == 'learn':
-            examples = self.sentences
+            examples = [[sentence, label] for sentence, label in zip(self.sentences, labels)]
         return self.batch(examples)
 
 

@@ -5,22 +5,21 @@ import torch
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 
-from . import utils
+from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure import leace
-from hyperplane_computation.utils import Label, Gender
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 
 
-def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_norm = True, **dict) -> tuple[list[LeaceEraser], list[LeaceEraser], list[LeaceEraser]]:
+def storing_hyperplanes(dataset : list[list[str, list[int]]], post_layer_norm=True, **dict) -> tuple[list[LeaceEraser]]:
   device = dict['device']
   model = dict['model']
 
   N_batch = len(dataset)
 
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
-  all_labels = torch.cat(labels, dim = 0).squeeze()
+  all_labels = torch.cat(labels, dim = 0).squeeze().unsqueeze(-1)
 
-  dim_label = labels[0].shape[1]
+  dim_label = all_labels.shape[1]
   dim_residual = activations[0].shape[-1]
 
   eraser_mean = []
@@ -82,7 +81,7 @@ def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_nor
 
 
 
-def hyperplane_acc(dataset : list[list[str, Label, Gender]], eval_metric : list, **dict) -> list[list[float]]:
+def hyperplane_acc(dataset : list[list[str, list[int]]], eval_metric : list, **dict) -> list[list[float]]:
   device = dict['device']
   model = dict['model']
 
@@ -90,7 +89,7 @@ def hyperplane_acc(dataset : list[list[str, Label, Gender]], eval_metric : list,
 
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
 
-  all_labels = torch.cat(labels).squeeze().to(device)
+  all_labels = torch.cat(labels).squeeze().unsqueeze(-1).to(device)
 
   acc_list = []
   for layer in tqdm(range(len(model.transformer.h))):

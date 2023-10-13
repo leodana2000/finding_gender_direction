@@ -16,7 +16,7 @@ def concat_list(lst):
   return new_lst
 
 
-def initiate_activations(dataset : list[list[Data, list[int]]], with_label = True, **dict):
+def initiate_activations(dataset : list[list[Data, list[int]]], **dict):
   device = dict['device']
   model = dict['model']
   tokenizer = dict['tokenizer']
@@ -33,8 +33,7 @@ def initiate_activations(dataset : list[list[Data, list[int]]], with_label = Tru
     tokenized_batch = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
     positions = torch.arange(tokenized_batch.shape[1]).to(int).to(device).to(int).to(device)
     activations.append(model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions))
-    if with_label:
-      labels.append(torch.Tensor([data[1] for data in batch]).unsqueeze(-1))
+    labels.append(torch.Tensor([data[1] for data in batch]).unsqueeze(-1))
   
   #Deletion of all the useless tensor to avoid RAM overload.
   del positions
