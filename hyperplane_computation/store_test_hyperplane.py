@@ -7,9 +7,11 @@ from sklearn.linear_model import LogisticRegression
 
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure import leace
+from hyperplane_computation.utils import Label, Gender
+from hyperplane_computation.concept_erasure.leace import LeaceEraser
 
 
-def storing_hyperplanes(dataset : list[list[str, utils.Label, utils.Gender]], post_layer_norm = True, **dict):
+def storing_hyperplanes(dataset : list[list[str, Label, Gender]], post_layer_norm = True, **dict) -> tuple[list[LeaceEraser], list[LeaceEraser], list[LeaceEraser]]:
   device = dict['device']
   model = dict['model']
 
@@ -80,7 +82,7 @@ def storing_hyperplanes(dataset : list[list[str, utils.Label, utils.Gender]], po
 
 
 
-def hyperplane_acc(dataset : list[list[str, utils.Label, utils.Gender]], eval_metric : list, **dict) -> list[list[float]]:
+def hyperplane_acc(dataset : list[list[str, Label, Gender]], eval_metric : list, **dict) -> list[list[float]]:
   device = dict['device']
   model = dict['model']
 

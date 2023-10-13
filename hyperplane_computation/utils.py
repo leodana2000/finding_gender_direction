@@ -1,7 +1,7 @@
 #code containing all the useful functions for the notebook to run
 
 import torch
-from concept_erasure.leace import LeaceEraser
+from hyperplane_computation.concept_erasure.leace import LeaceEraser
 cosim = torch.nn.CosineSimilarity(-1)
 
 Gender = 1 | -1 #1 for male, -1 for female
@@ -19,8 +19,10 @@ def process_labels(gender : Gender, label : Label):
     return [0, gender, 0, 0]
   elif label == 'name':
     return [0, 0, 0, gender]
-  else:
+  elif label == 'anatomy':
     return [0, 0, gender, 0]
+  else:
+    return [gender]
 
 
 def initiate_activations(dataset : list[list[Data, list[int]]], with_label = True, **dict):
@@ -38,7 +40,7 @@ def initiate_activations(dataset : list[list[Data, list[int]]], with_label = Tru
 
     #We initiate the activations manually
     tokenized_batch = tokenizer([data[0] for data in batch], padding = True, return_tensors = 'pt')["input_ids"].to(device)
-    positions = torch.arrange(tokenized_batch.shape[1]).to(int).to(device).to(int).to(device) #([i for i in range(tokenized_batch.shape[1])]).to(int).to(device)
+    positions = torch.arange(tokenized_batch.shape[1]).to(int).to(device).to(int).to(device)
     activations.append(model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions))
     if with_label:
       labels.append(torch.Tensor([data[1] for data in batch]).unsqueeze(-1))
@@ -89,19 +91,22 @@ def get_quantile(leace_eraser : LeaceEraser, all_acts : torch.Tensor, **dict):
 
   del sorted_tensor
 
-  return quantile
+  return quantile.squeeze()
 
 
 
 def probe_eval(eraser_list : list[LeaceEraser], **dict):
   device = dict['device']
 
-  def metric(target_activations, layer : int, true_label):
-    dir = eraser_list[layer].proj_right[0].to(device)
+  def metric(all_acts : torch.Tensor, layer : int, true_label : torch.Tensor):
+    '''
+    Evaluate the accuracy of each type of data on its hyperplane.
+    '''
+    dir = eraser_list[layer].proj_right.to(device)
     bias = eraser_list[layer].bias.to(device)
-    Nb_ex = len(target_activations)
+    Nb_ex = len(all_acts)
 
-    acc = torch.sum(cosim(dir, target_activations - bias)*true_label > 0).item()/Nb_ex
+    acc = torch.sum(cosim(true_label@dir, all_acts - bias) > 0).item()/Nb_ex
     return acc
   
   return metric
