@@ -1,6 +1,6 @@
 #code to generate de test data
 import pandas as pd
-import utils
+import hyperplane_computation.utils as utils
 
 D2 = pd.read_csv('Data/yob1880.csv')
 threshold = 20 #to only use the names that are 'real names'

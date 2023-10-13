@@ -9,20 +9,11 @@ Label = str #'noun' | 'pronoun' |'name' | 'anatomy'
 Data = str
 
 
-def process_labels(gender : Gender, label : Label):
-  '''
-  Prepares the label to be fed into the concept_erasure module.
-  '''
-  if label == 'noun':
-    return [gender, 0, 0, 0]
-  elif label == 'pronoun':
-    return [0, gender, 0, 0]
-  elif label == 'name':
-    return [0, 0, 0, gender]
-  elif label == 'anatomy':
-    return [0, 0, gender, 0]
-  else:
-    return [gender]
+def concat_list(lst):
+  new_lst = []
+  for l in lst:
+    new_lst += l
+  return new_lst
 
 
 def initiate_activations(dataset : list[list[Data, list[int]]], with_label = True, **dict):
@@ -112,7 +103,6 @@ def probe_eval(eraser_list : list[LeaceEraser], **dict):
   return metric
 
 
-
 def token_augmentation(list : list, text_list : list[str], **dict):
   tokenizer = dict['tokenizer']
   for text in text_list:
@@ -134,7 +124,6 @@ def show_proba(proba, level = 0.01, nb_tokens = 10, decode = False, **dict):
 
   proba_token_list.sort()
   return proba_token_list[-nb_tokens:]
-
 
 
 def finds_indices(example_tokens : list[list[int]], target_tokens : list[list[int], list[int]]):

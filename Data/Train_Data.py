@@ -1,5 +1,5 @@
 #code to generate de training data
-import utils
+from hyperplane_computation import utils
 import pandas as pd
 eos_token = '<|endoftext|>'
 
@@ -73,27 +73,19 @@ prompts = [prompt_pronoun, prompt_noun, prompt_anatomy]
 D1_name = ['pronouns', 'nouns', 'anatomy']
 
 
-Train_m_1 = []
-Train_f_1 = []
-Test_m_1 = []
-Test_f_1 = []
+Data_m_1 = []
+Data_f_1 = []
 len_list = []
 
 for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
-  Train_m, Test_m = utils.split_list(d1_m)
-  Train_f, Test_f = utils.split_list(d1_f)
 
-  Train_m = utils.concat_list([[eos_token + prpt + word for word in Train_m] for prpt in prompt])
-  Train_f = utils.concat_list([[eos_token + prpt + word for word in Train_f] for prpt in prompt])
-  Test_m = utils.concat_list([[eos_token + prpt + word for word in Test_m] for prpt in prompt])
-  Test_f = utils.concat_list([[eos_token + prpt + word for word in Test_f] for prpt in prompt])
+  Data_m = utils.concat_list([[eos_token + prpt + word for word in d1_m] for prpt in prompt])
+  Data_f = utils.concat_list([[eos_token + prpt + word for word in d1_f] for prpt in prompt])
 
-  len_list.append([len(Train_m), len(Train_f), len(Test_m), len(Test_f)])
+  len_list.append([len(Data_m), len(Data_f)])
 
-  Train_m_1 += Train_m
-  Train_f_1 += Train_f
-  Test_m_1 += Test_m
-  Test_f_1 += Test_f
+  Data_m_1 += Data_m
+  Data_f_1 += Data_f
 
 #Creation of the dataset D2: it contains gendered names.
 #There is a total of ~750 distinct names.
@@ -112,24 +104,17 @@ prompt_f = ['',
             'My name is ',
             'Her name is ']
 
-Train_f, Test_f = utils.split_list([word for word in D2_f])
-Train_m, Test_m = utils.split_list([word for word in D2_m])
+Data_m_2 = utils.concat_list([[eos_token + prpt + word for word in D2_m] for prpt in prompt_m])
+Data_f_2 = utils.concat_list([[eos_token + prpt + word for word in D2_f] for prpt in prompt_f])
 
-Train_m_2 = utils.concat_list([[eos_token + prpt + word for word in Train_m] for prpt in prompt_m])
-Train_f_2 = utils.concat_list([[eos_token + prpt + word for word in Train_f] for prpt in prompt_f])
-Test_m_2 = utils.concat_list([[eos_token + prpt + word for word in Test_m] for prpt in prompt_m])
-Test_f_2 = utils.concat_list([[eos_token + prpt + word for word in Test_f] for prpt in prompt_f])
-
-examples = Train_m_1 + Train_f_1 + Test_m_1 + Test_f_1 + Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2
-data_lbl = ['pronoun']*len_list[0][0] + ['noun']*len_list[1][0] + ['anatomy']*len_list[2][0] + ['pronoun']*len_list[0][1] + ['noun']*len_list[1][1] + ['anatomy']*len_list[2][1] + ['pronoun']*len_list[0][2] + ['noun']*len_list[1][2] + ['anatomy']*len_list[2][2] + ['pronoun']*len_list[0][3] + ['noun']*len_list[1][3] + ['anatomy']*len_list[2][3] + ['name']*len(Train_m_2 + Train_f_2 + Test_m_2 + Test_f_2)
-gender = [1]*len(Train_m_1) + [-1]*len(Train_f_1) + [1]*len(Test_m_1) + [-1]*len(Test_f_1) + [1]*len(Train_m_2) + [-1]*len(Train_f_2) + [1]*len(Test_m_2) + [-1]*len(Test_f_2)
-train = [1]*len(Train_m_1 + Train_f_1) + [0]*len(Test_m_1 + Test_f_1) + [1]*len(Train_m_2 + Train_f_2) + [0]*len(Test_m_2 + Test_f_2)
+examples = Data_m_1 + Data_f_1 + Data_m_2 + Data_f_2
+data_lbl = [D1_name[0]]*len_list[0][0] + [D1_name[1]]*len_list[1][0] + [D1_name[2]]*len_list[2][0] + [D1_name[0]]*len_list[0][1] + [D1_name[1]]*len_list[1][1] + [D1_name[2]]*len_list[2][1] + ['name']*len(Data_m_2 + Data_f_2)
+gender = [1]*len(Data_m_1) + [-1]*len(Data_f_1) + [1]*len(Data_m_2) + [-1]*len(Data_f_2)
 
 D = {
   'examples': examples,
   'data_lbl': data_lbl,
   'gender': gender,
-  'train': train,
   }
 
 DF = pd.DataFrame.from_dict(D, orient = 'columns')

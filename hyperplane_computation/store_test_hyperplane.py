@@ -5,7 +5,7 @@ import torch
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 
-from hyperplane_computation import utils
+from . import utils
 from hyperplane_computation.concept_erasure import leace
 from hyperplane_computation.utils import Label, Gender
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
