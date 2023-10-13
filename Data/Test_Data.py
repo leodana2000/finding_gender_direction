@@ -4,14 +4,9 @@ import hyperplane_computation.utils as utils
 
 D2 = pd.read_csv('Data/yob1880.csv')
 threshold = 20 #to only use the names that are 'real names'
-D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
-D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
-
-Train_f, Test_f = utils.split_list([word for word in D2_f])
-Train_m, Test_m = utils.split_list([word for word in D2_m])
-
+Test_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name'].values.tolist()
+Test_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name'].values.tolist()
 eos_token = '<|endoftext|>'
-
 
 #female sentences
 
@@ -163,10 +158,10 @@ example_prompts_C = [eos_token
 #!! gpt2-xl doesn't recognize correctly all of them !!
 
 #evaluation prompt: checked that all prompt are understood by GPT2-xl
-example_prompts_D = ['Hi, my name is ' + name[0] + '. Answer:' for name in Test_m]
+example_prompts_D = ['Hi, my name is ' + name + '. Answer:' for name in Test_m]
 
 #use "" to ask for the last token
-target_text_D = [' ' + name[0] for name in Test_m]
+target_text_D = [' ' + name for name in Test_m]
 target_text_D += target_text_D
 
 pre_prompt_a = 'He is a boy. Answer: male \n '
