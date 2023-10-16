@@ -1,20 +1,19 @@
 import random
+import numpy
+from pandas import DataFrame
 
 class DataStorage:
-    def __init__(self, sentences, labels, valence, nb_class, label_names, 
-                 batch_size = 1024, rand_seed = 42, train_test_ratio = 0.9) -> None:
+    def __init__(self, data, batch_size = 1024, rand_seed = 42, train_test_ratio = 0.9) -> None:
         
-        self.sentences : list[str] = sentences
-        self.labels : list[list[str]] = labels
-        self.valences : list[1 | -1] = valence
-        self.nb_class : int = nb_class
-        self.label_names : list[str] = label_names
+        self.data : DataFrame = data
+        self.nb_class : int = data['label'].nunique()
+        self.label_names : list[str] = data['label'].unique()
         self.is_training : list[bool]
         self.dim_labels : list[list[int]]
 
         self.batch_size : int = batch_size
         self.rand_seed : int = rand_seed
-        self.train_test_ratio = train_test_ratio
+        self.train_test_ratio : int = train_test_ratio
 
         self.init_train_test()
         self.init_labels()
@@ -22,10 +21,10 @@ class DataStorage:
 
     def init_labels(self) -> None:
         '''
-        Transform the labels into a nb_class vector with one valence coordinate.
+        Transform the labels into a nb_class vector with one binary coordinate.
         '''
         dim_labels = []
-        for label, valence in zip(self.labels, self.valences):
+        for label, valence in zip(self.data['label'], self.data['bin']):
             dim_label = [0]*self.nb_class
             for i, name in enumerate(self.label_names):
                 if label == name:
@@ -38,23 +37,23 @@ class DataStorage:
     def init_train_test(self) -> None:
         '''
         Initialise which data will be in training and which will be in test.
+        We garantee the same proportion of train and test for each class.
         '''
         random.seed(self.rand_seed)
-        nb_data = len(self.sentences)
-        nb_train = int(self.train_test_ratio*nb_data)
-        self.is_training = [True]*nb_train + [False]*(nb_data - nb_train)
-        random.shuffle(self.is_training)
+        self.is_training = [True]*len(self.data['examples'])
 
+        for name in self.label_names:
+            training = []
+            nb_data = len(self.data[self.data['label'] == name])
+            nb_train = int(self.train_test_ratio*nb_data)
+            training = [True]*nb_train + [False]*(nb_data - nb_train)
+            random.shuffle(training)
 
-    def add(self, new_sentences, new_labels, new_valences) -> None:
-        '''
-        Adds a new set of data.
-        '''
-        self.sentences.append(new_sentences)
-        self.labels.append(new_labels)
-        self.valences.append(new_valences)
-
-        self.init_labels()
+            index = 0
+            for i, ex_name in enumerate(self.data['label']):
+                if ex_name == name:
+                    self.is_training = training[index]
+                    index += 1
 
 
     def batch(self, list : list[str]) -> list[list[str]]:
@@ -73,12 +72,13 @@ class DataStorage:
         Train and Test splits the data 
         '''
         labels = self.get_labels(multi_dim=multi_dim)
+        sentences = self.data['examples']
         if method == 'train':
-            examples = [[sentence, label] for sentence, label, is_train in zip(self.sentences, labels, self.is_training) if is_train]
+            examples = [[sentence, label] for sentence, label, is_train in zip(sentences, labels, self.is_training) if is_train]
         elif method == 'test':
-            examples = [[sentence, label] for sentence, label, is_learn in zip(self.sentences, labels, self.is_learning) if not is_learn]
+            examples = [[sentence, label] for sentence, label, is_train in zip(sentences, labels, self.is_training) if not is_train]
         elif method == 'learn':
-            examples = [[sentence, label] for sentence, label in zip(self.sentences, labels)]
+            examples = [[sentence, label] for sentence, label in zip(sentences, labels)]
         return self.batch(examples)
 
 

@@ -1,4 +1,4 @@
-,examples,data_lbl,gender
+,examples,label,bin
 0,<|endoftext|>The detective examined the crime scene. He,pronouns,1
 1,<|endoftext|>The detective examined the crime scene. His,pronouns,1
 2,<|endoftext|>The detective examined the crime scene.He,pronouns,1

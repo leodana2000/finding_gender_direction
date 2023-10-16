@@ -109,12 +109,12 @@ Data_f_2 = utils.concat_list([[eos_token + prpt + word for word in D2_f] for prp
 
 examples = Data_m_1 + Data_f_1 + Data_m_2 + Data_f_2
 data_lbl = [D1_name[0]]*len_list[0][0] + [D1_name[1]]*len_list[1][0] + [D1_name[2]]*len_list[2][0] + [D1_name[0]]*len_list[0][1] + [D1_name[1]]*len_list[1][1] + [D1_name[2]]*len_list[2][1] + ['name']*len(Data_m_2 + Data_f_2)
-gender = [1]*len(Data_m_1) + [-1]*len(Data_f_1) + [1]*len(Data_m_2) + [-1]*len(Data_f_2)
+bin = [1]*len(Data_m_1) + [-1]*len(Data_f_1) + [1]*len(Data_m_2) + [-1]*len(Data_f_2)
 
 D = {
   'examples': examples,
-  'data_lbl': data_lbl,
-  'gender': gender,
+  'label': data_lbl,
+  'bin': bin,
   }
 
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
