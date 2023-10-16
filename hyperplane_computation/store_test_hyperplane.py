@@ -11,6 +11,17 @@ from hyperplane_computation.concept_erasure.leace import LeaceEraser
 
 
 def storing_hyperplanes(dataset : list[list[str, list[int]]], post_layer_norm=True, learn_probe=False, **dict) -> tuple[list[LeaceEraser]]:
+  '''
+  Computes hyperplanes for the difference in mean, diff-mean quantile and Logisticregression method.
+  The dataset is batched, and its elements are composed of:
+  - a sentence to learn, but only the last token is used (so if you target word is at the middle of 
+    the sentence, you can discard the rest)
+  - a list of integers, one of which is 1 or -1, which represents the concept (positive of negative)
+    and the index is the class it belongs to.
+  
+  If you want a faster computation, use learn_probe=False as the LogisticRegression is quite long to run.
+  '''
+  
   device = dict['device']
   model = dict['model']
 

@@ -1,6 +1,7 @@
 #code containing all the useful functions for the notebook to run
 
 import torch
+import numpy as np
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 cosim = torch.nn.CosineSimilarity(-1)
 
@@ -15,6 +16,20 @@ def concat_list(lst):
   for l in lst:
     new_lst += l
   return new_lst
+
+
+def transpose_list(lst):
+  final_lst = []
+  for batch in lst:
+    np_batch = np.array(batch)
+    np_batch = np.transpose(np_batch, (2, 1, 0))
+    final_lst.append(np_batch)
+    
+  np.concatenate(final_lst, 0)
+  final_lst = np.concatenate(final_lst, 0)
+  final_lst = np.transpose(final_lst, (2, 1, 0))
+
+  return final_lst
 
 
 def initiate_activations(dataset : list[list[Data, list[Bin]]], **dict):
@@ -120,7 +135,7 @@ def show_proba(proba : torch.Tensor, level : float = 0.01, nb_tokens : int = 10,
   return proba_token_list[-nb_tokens:]
 
 
-def finds_indices(example_tokens : list[list[Token]], target_tokens : list[list[Token], list[Token]]):
+def finds_indices(ex_batch : list[list[Token]], tar_batch : list[list[Token]]):
   '''
   Finds the occurences of the target inside the examples, but only the last one for each target.
   stream_indices : list[int], list of all streams where the target was detected.
@@ -133,24 +148,25 @@ def finds_indices(example_tokens : list[list[Token]], target_tokens : list[list[
   example_indices = []
   stream_example_indices = [[],[]]
 
-  for i, (example, target_token) in enumerate(zip(example_tokens, target_tokens)):
-    len_target = len(target_token)
+  for i, (ex, tar) in enumerate(zip(ex_batch, tar_batch)):
+    len_tar= len(tar)
+    len_ex = len(ex)
 
     #If there is no target, we take the last stream.
-    if len(target_token) == 0:
-      s_indice = torch.Tensor([len(example)])
+    if len_tar == 0:
+      s_indice = torch.Tensor([len_ex])
       e_indice = torch.Tensor([i])
-      stream_example_indices[0].append(len(example))
+      stream_example_indices[0].append(len_ex)
       stream_example_indices[1].append(i)
 
     #Otherwise, we take the targeted streams.
     else:
-      position = torch.where(torch.Tensor(example) == target_token[0])[0][-1].item() #[-1] means that we take only the last occurence
-      if [example[i] for i in range(position, position + len_target)] == target_token:
+      position = torch.where(torch.Tensor(ex) == tar[0])[0][-1].item() #[-1] means that we take only the last occurence
+      if [ex[i] for i in range(position, position + len_tar)] == tar:
 
-        s_indice = torch.Tensor([pos for pos in range(position, position + len_target)])
-        e_indice = torch.Tensor([i]*len_target)
-        stream_example_indices[0].append(position + len_target - 1)
+        s_indice = torch.Tensor([pos for pos in range(position, position + len_tar)])
+        e_indice = torch.Tensor([i]*len_tar)
+        stream_example_indices[0].append(position + len_tar - 1)
         stream_example_indices[1].append(i)
       else:
         print("Error, no target found.")
@@ -158,4 +174,6 @@ def finds_indices(example_tokens : list[list[Token]], target_tokens : list[list[
     stream_indices.append(s_indice)
     example_indices.append(e_indice)
 
-  return torch.cat(stream_indices, dim = 0).to(int), torch.cat(example_indices, dim = 0).to(int), torch.Tensor(stream_example_indices).to(int)
+  return [torch.cat(stream_indices, dim = 0).to(int), 
+          torch.cat(example_indices, dim = 0).to(int), 
+          torch.Tensor(stream_example_indices).to(int)]

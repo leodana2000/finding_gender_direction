@@ -17,26 +17,6 @@ def diag_proba(logit_target, len_example, proba):
   return torch.sum(proba[diag, len_example][:, logit_target].squeeze(-1), dim = -1).unsqueeze(0)
 
 
-def batch_probabilities(example_tokens, len_example, logit_target, **dict):
-  '''
-  Computes the forward pass for each batch and puts them together.
-  '''
-  model = dict['model']
-
-  male_batch = []
-  female_batch = []
-  for ex_batch, len_batch in zip(example_tokens, len_example):
-
-    probas = torch.softmax(model(ex_batch).logits, dim = -1)
-
-    male_batch += diag_proba(logit_target[0], len_batch, probas)
-    female_batch += diag_proba(logit_target[1], len_batch, probas)
-
-  del probas
-
-  return male_batch, female_batch
-
-
 def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
                        len_example, meta_hook, hook, layer_list,
                        layer_res_list, **dict):
@@ -56,7 +36,10 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
     for layer in layers_res:
       model.transformer.h[layer].attn.register_forward_pre_hook(hook(leace_res_list[layer]))
 
-    male_batch, female_batch = batch_probabilities(example_tokens, len_example, logit_target, **dict)
+    probas = torch.softmax(model(example_tokens).logits, dim = -1)
+
+    male_proba = diag_proba(logit_target[0], len_example, probas)
+    female_proba = diag_proba(logit_target[1], len_example, probas)
 
     for layer in layers:
       model.transformer.h[layer].attn._forward_hooks.clear()
@@ -64,10 +47,11 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
     for layer in layers_res:
       model.transformer.h[layer].attn._forward_pre_hooks.clear()
 
-    score.append(torch.cat([male_batch, female_batch], dim = 0).unsqueeze(0))
+    score.append(torch.cat([male_proba, female_proba], dim = 0).unsqueeze(0))
 
-  del male_batch
-  del female_batch
+  del probas
+  del male_proba
+  del female_proba
 
   return score
 
@@ -82,34 +66,37 @@ def score(example_prompts : list[list[str]], logit_target : list[list[int]], lea
   tokenizer = dict['tokenizer']
   device = dict['device']
 
-  example_tokens = []
-  len_examples = []
-  indices = []
-  for ex_batch, tar_batch in zip(example_prompts, modif_target):
+  score = []
+  for i, (ex_batch, tar_batch) in enumerate(zip(example_prompts, modif_target)):
     #We measure the length of each example to know where the answer is.
-    tokens_batch = [tokenizer(example_prompt).input_ids for example_prompt in ex_batch]
-    len_examples.append(torch.Tensor([len(tokens)-1 for tokens in tokens_batch]).to(int))
+    tokens_batch = [tokenizer(ex).input_ids for ex in ex_batch]
+    len_examples = torch.Tensor([len(tokens)-1 for tokens in tokens_batch]).to(int)
 
     #We create a list of all the position where to do the hook.
     #We only hook the last example of the modif_target.
-    indices.append(utils.finds_indices(tokens_batch, tar_batch)) #stream, example, stream_example
+    indices = utils.finds_indices(tokens_batch, tar_batch) #stream, example, stream_example
 
     #We tokenize all example together, with padding, to be faster.
-    example_tokens.append(tokenizer(ex_batch, padding = True, return_tensors = 'pt').input_ids.to(device))
+    example_tokens = tokenizer(ex_batch, padding = True, return_tensors = 'pt').input_ids.to(device)
 
-
-  score = []
-  for lbd in tqdm(lbds):
-    hook = hook_wte(lbd, indices)
-    meta_hook = hook_attn(indices)
-    score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
-                             len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
+    #We compute the score for this batch
+    batch_score = []
+    print("Batch {}.".format(i))
+    for lbd in tqdm(lbds):
+      hook = hook_wte(lbd, indices)
+      meta_hook = hook_attn(indices)
+      batch_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
+                                      len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
+    score.append(batch_score)
 
   del example_tokens
   del len_examples
   del indices
 
-  return score
+  #invert the dimensions (batch, lbds, bin, nb_ex) -> (lbds, bin, nb_ex*batch)
+  final_score = utils.transpose_list(score)
+
+  return final_score
 
 
 #ToDo: make it more general!

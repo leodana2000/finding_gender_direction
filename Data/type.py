@@ -3,6 +3,16 @@ from pandas import DataFrame
 
 class DataStorage:
     def __init__(self, data, batch_size = 1024, rand_seed = 42, train_test_ratio = 0.9) -> None:
+
+        '''
+        A class to easily use the data to learn conceptual directions (hyperplanes). I takes a DataFrame with columns:
+        - 'sentences' : the list of all sentencesthat are going to be used for training. 
+            The last token is the only on on which the hyperplane is learnt.
+        - 'label' : names for classes that are meaningfully differents, for example 'pronouns', 'nouns', 'names'. You can
+            you can learn them separatly.
+        - 'bin' : a binary variable, to identify a concept and its opposite, for example 'male' and 'female'. They should
+             be represented by +1 or -1.
+        '''
         
         self.data : DataFrame = data
         self.nb_class : int = data['label'].nunique()
