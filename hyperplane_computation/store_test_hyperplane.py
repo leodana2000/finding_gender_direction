@@ -89,7 +89,7 @@ def hyperplane_acc(dataset : list[list[str, list[int]]], eval_metric : list, **d
 
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
 
-  all_labels = torch.cat(labels).squeeze().unsqueeze(-1).to(device)
+  all_labels = torch.cat(labels, dim=0).to(device)
 
   acc_list = []
   for layer in tqdm(range(len(model.transformer.h))):

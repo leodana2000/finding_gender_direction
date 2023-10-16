@@ -1,5 +1,4 @@
 import random
-import numpy
 from pandas import DataFrame
 
 class DataStorage:
@@ -58,27 +57,31 @@ class DataStorage:
 
     def batch(self, list : list[str]) -> list[list[str]]:
         '''
-        Transform the data into subsets of size at least bach_size.
+        Transform the data into subsets of size at most bach_size.
         '''
         Nb_ex = len(list)
         Nb_batch = Nb_ex//self.batch_size + 1
         return [list[i*self.batch_size:min((i+1)*self.batch_size, Nb_ex)] for i in range(Nb_batch)]
 
 
-    def get_ex(self, method, multi_dim=True) -> list[list[str, list[int]]]:
+    def get_ex(self, method, multi_dim=True, label='all') -> list[list[str, list[int]]]:
         '''
-        Returns the batched data to train, test, or learn. 
-        Learning takes every example to learn the directions.
-        Train and Test splits the data 
+        Returns the batched data to train, test, or learn the hyperplanes.
+        Train and Test splits the data into different subsets, and respect the class proportions.
+        In each case, you can choose to only take a single classes of examples.
         '''
         labels = self.get_labels(multi_dim=multi_dim)
         sentences = self.data['examples']
+        if label == 'all':
+            is_names = [True]*len(sentences)
+        else:
+            is_names = (self.data['label'] == label).values.tolist()
         if method == 'train':
-            examples = [[sentence, label] for sentence, label, is_train in zip(sentences, labels, self.is_training) if is_train]
+            examples = [[sentence, label] for sentence, label, is_train, is_name in zip(sentences, labels, self.is_training, is_names) if is_train and is_name]
         elif method == 'test':
-            examples = [[sentence, label] for sentence, label, is_train in zip(sentences, labels, self.is_training) if not is_train]
+            examples = [[sentence, label] for sentence, label, is_train, is_name in zip(sentences, labels, self.is_training, is_names) if (not is_train) and is_name]
         elif method == 'learn':
-            examples = [[sentence, label] for sentence, label in zip(sentences, labels)]
+            examples = [[sentence, label] for sentence, label, is_name in zip(sentences, labels, is_names) if is_name]
         return self.batch(examples)
 
 
