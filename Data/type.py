@@ -52,7 +52,7 @@ class DataStorage:
             index = 0
             for i, ex_name in enumerate(self.data['label']):
                 if ex_name == name:
-                    self.is_training = training[index]
+                    self.is_training[i] = training[index]
                     index += 1
 
 
