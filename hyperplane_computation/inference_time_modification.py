@@ -4,111 +4,131 @@
 import torch
 from tqdm import tqdm
 from hyperplane_computation import utils
+from hyperplane_computation.concept_erasure.leace import LeaceEraser
 
 
-#Fast way to compute the probability for any nb_tokens but only when the tokens are of length one.
-def fast_proba(token_list, len_example, proba):
-  return torch.sum(proba[torch.arange(len(len_example)), len_example][:, token_list].squeeze(-1), dim = -1).unsqueeze(0)
-
-
-#Fast way to intervene on the cache by using the custom attention.
-def fast_cache_intervention(tokens, token_lists, leace_list, leace_res_list,
-                            len_example, meta_hook, hook, layer_list,
-                            layer_res_list, **dict):
-    model = dict['model']
-    device = dict['device']
-
-    score = []
-    for layers, layers_res in zip(layer_list, layer_res_list):
-
-      for layer in layers:
-        model.transformer.h[layer].attn.register_forward_hook(meta_hook(hook(leace_list[layer])))
-
-      for layer in layers_res:
-        model.transformer.h[layer].attn.register_forward_pre_hook(hook(leace_res_list[layer]))
-
-      logits = model(tokens.to(device)).logits
-
-      for layer in layers:
-        model.transformer.h[layer].attn._forward_hooks.clear()
-
-      for layer in layers_res:
-        model.transformer.h[layer].attn._forward_pre_hooks.clear()
-
-      probas = torch.softmax(logits, dim = -1)
-
-      proba_male = fast_proba(token_lists[0], len_example, probas)
-      proba_female = fast_proba(token_lists[1], len_example, probas)
-
-      score.append(torch.cat([proba_male, proba_female], dim = 0).unsqueeze(0))
-
-      del proba_male
-      del proba_female
-      del probas
-
-    return score
-
-
-#Initiate a fast way to compute the score, that doesn't involves looking at tokens of length > 1.
-def fast_score(example_prompts : list[str], token_lists : list[list[int]], leace_list,
-              leace_res_list, target_tokens : list[list[int]], layer_list : list[list[int]], 
-              layer_res_list : list[int], lbds = [1], **dict):
+def diag_proba(logit_target, len_example, proba):
   '''
-  This function returns the probabilities of each answer for each example and each lambda.
-  - example_prompts : list[str], examples to test,
-  - token_lists : list[list[int]], token that will count as an answer, position 0 is male and 1 is female,
-  - leace_list : list[leace], all leace estimators in attention (one per layer),
-  - leace_res_list : list[leace], all leace estimators in residual (one per layer),
-  - target_tokens : list[int] which token to target in the examples,
-  - layer_list : list[list[int]] which layer to apply the intervention on attention, you can test multiple in a row,
-  - layer_res_list : list[list[int]] which layer to apply the intervention in the residual, you can test multiple in a row,
-  - lbds : list[float] parameters lambda to test,
+  Computes the probability of the batch by summing the probabilities of all valid next tokens.
+  [diag, len_example] is the diagonal saying for each example, where to look for the probability.
+  [:, logit_target] says to consider only the target tokens to compute the probability.
   '''
-  tokenizer = dict['tokenizer']
-  device = dict['device']
+  diag = torch.arange(len(len_example))
+  return torch.sum(proba[diag, len_example][:, logit_target].squeeze(-1), dim = -1).unsqueeze(0)
 
-  #We measure the length of each example to know where the answer is.
-  example_tokens = [tokenizer(example_prompt).input_ids for example_prompt in example_prompts]
-  len_examples = torch.Tensor([len(tokens)-1 for tokens in example_tokens]).to(int)
 
-  #We create a list of all the position where to do the hook.
-  #We only hook the last example of the target_tokens.
-  stream_indices, example_indices, stream_example_indices = utils.finds_indices(example_tokens, target_tokens)
+def batch_probabilities(example_tokens, len_example, logit_target, **dict):
+  '''
+  Computes the forward pass for each batch and puts them together.
+  '''
+  model = dict['model']
 
-  #We tokenize all example together, with padding, to be faster.
-  example_tokens = tokenizer(example_prompts, padding = True, return_tensors = 'pt').input_ids.to(device)
+  male_batch = []
+  female_batch = []
+  for ex_batch, len_batch in zip(example_tokens, len_example):
 
+    probas = torch.softmax(model(ex_batch).logits, dim = -1)
+
+    male_batch += diag_proba(logit_target[0], len_batch, probas)
+    female_batch += diag_proba(logit_target[1], len_batch, probas)
+
+  del probas
+
+  return male_batch, female_batch
+
+
+def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
+                       len_example, meta_hook, hook, layer_list,
+                       layer_res_list, **dict):
+  '''
+  Applies all the hooks to the model before running the forward pass, and then clear them.
+  We run len(layer_list) experiments. In each we apply the modified attention hook, and the normal modification hook 
+  in the residual stream.
+  '''
+  
+  model = dict['model']
 
   score = []
-  for lbd in tqdm(lbds):
-    hook = hook_wte(lbd, stream_indices, example_indices)
-    meta_hook = hook_attn(stream_indices, example_indices, stream_example_indices)
-    score.append(fast_cache_intervention(example_tokens, token_lists, leace_list, leace_res_list, 
-                             len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
+  for layers, layers_res in zip(layer_list, layer_res_list):
+    for layer in layers:
+      model.transformer.h[layer].attn.register_forward_hook(meta_hook(hook(leace_list[layer])))
 
-  del example_tokens
-  del stream_indices
-  del example_indices
-  del stream_example_indices
-  del len_examples
+    for layer in layers_res:
+      model.transformer.h[layer].attn.register_forward_pre_hook(hook(leace_res_list[layer]))
+
+    male_batch, female_batch = batch_probabilities(example_tokens, len_example, logit_target, **dict)
+
+    for layer in layers:
+      model.transformer.h[layer].attn._forward_hooks.clear()
+
+    for layer in layers_res:
+      model.transformer.h[layer].attn._forward_pre_hooks.clear()
+
+    score.append(torch.cat([male_batch, female_batch], dim = 0).unsqueeze(0))
+
+  del male_batch
+  del female_batch
 
   return score
 
 
+#Initiate a fast way to compute the score, that doesn't involves looking at tokens of length > 1.
+def score(example_prompts : list[list[str]], logit_target : list[list[int]], leace_list : list[LeaceEraser],
+          leace_res_list : list[LeaceEraser], modif_target : list[list[int]], layer_list : list[list[int]], 
+          layer_res_list : list[int], lbds : torch.Tensor = torch.Tensor([1]), **dict):
+  '''
+  This function returns the probabilities of each answer for each example and each lambda.
+  '''
+  tokenizer = dict['tokenizer']
+  device = dict['device']
 
-#Custom attention module. It compute sequentially the attention pattern by first
-#computing the attention until the first cut (which is the first min of
-#stream_example_indices[0]), then it changes ex ante the key and value of the right
-#example and stream so that the targeted gendered token will be changed. It then
-#continues likewise until the next targeted stream until the list is empty.
+  example_tokens = []
+  len_examples = []
+  indices = []
+  for ex_batch, tar_batch in zip(example_prompts, modif_target):
+    #We measure the length of each example to know where the answer is.
+    tokens_batch = [tokenizer(example_prompt).input_ids for example_prompt in ex_batch]
+    len_examples.append(torch.Tensor([len(tokens)-1 for tokens in tokens_batch]).to(int))
+
+    #We create a list of all the position where to do the hook.
+    #We only hook the last example of the modif_target.
+    indices.append(utils.finds_indices(tokens_batch, tar_batch)) #stream, example, stream_example
+
+    #We tokenize all example together, with padding, to be faster.
+    example_tokens.append(tokenizer(ex_batch, padding = True, return_tensors = 'pt').input_ids.to(device))
+
+
+  score = []
+  for lbd in tqdm(lbds):
+    hook = hook_wte(lbd, indices)
+    meta_hook = hook_attn(indices)
+    score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
+                             len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
+
+  del example_tokens
+  del len_examples
+  del indices
+
+  return score
+
 
 #ToDo: make it more general!
 def attn_forward(module,
                  hidden_states,
                  hook,
-                 stream_indices,
-                 example_indices,
-                 stream_example_indices):
+                 indices):
+  
+  '''
+  This is a custom attention module designed to stop information from reaching certain future layers with minimal intervention.
+  See X for a thorough explanation of the technique.
+  We define a set of index on which we want to change the past keys and values for some example. 
+  Thus we first computes all the modified keys a and values. At the right index, after the attention block at tthat index, 
+  we change the keys and values.
+  '''
+  
+  stream_indices = indices[0]
+  example_indices = indices[1]
+  stream_example_indices = indices[2]
 
   #We compute the usual query, key and values.
   query, key, value = module.c_attn(hidden_states).split(module.split_size, dim=2)
@@ -161,22 +181,24 @@ def attn_forward(module,
   return outputs
 
 
-
-#write in the direction of the difference in mean
-def hook_wte(lbd, stream_indices, example_indices):
+def hook_wte(lbd, indices):
+  '''
+  A hook designed to apply concept erasure to the input of the attention module, or a block.
+  '''
   def meta_hook(leace_eraser):
     def hook(module, input):
-      input[0][example_indices, stream_indices] = leace_eraser(input[0][example_indices, stream_indices], lbd)
+      input[0][indices[1], indices[0]] = leace_eraser(input[0][indices[1], indices[0]], lbd)
       return input
     return hook
   return meta_hook
 
 
-
-#Overwrite the usual attention mechanism with a custom one.
-def hook_attn(stream_indices, example_indices, stream_example_indices):
+def hook_attn(indices):
+  '''
+  A hook designed to change the attention's computation for our custom attention.
+  '''
   def meta_hook(hookk):
     def hook(module, input, output):
-      return attn_forward(module, input[0], hookk, stream_indices, example_indices, stream_example_indices)
+      return attn_forward(module, input[0], hookk, indices)
     return hook
   return meta_hook

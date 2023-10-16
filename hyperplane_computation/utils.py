@@ -4,9 +4,10 @@ import torch
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 cosim = torch.nn.CosineSimilarity(-1)
 
-Gender = 1 | -1 #1 for male, -1 for female
+Bin = 1 | -1 #1 for male, -1 for female
 Label = str #'noun' | 'pronoun' |'name' | 'anatomy'
 Data = str
+Token = int
 
 
 def concat_list(lst):
@@ -16,7 +17,7 @@ def concat_list(lst):
   return new_lst
 
 
-def initiate_activations(dataset : list[list[Data, list[int]]], **dict):
+def initiate_activations(dataset : list[list[Data, list[Bin]]], **dict):
   device = dict['device']
   model = dict['model']
   tokenizer = dict['tokenizer']
@@ -102,16 +103,10 @@ def probe_eval(eraser_list : list[LeaceEraser], **dict):
   return metric
 
 
-def token_augmentation(list : list, text_list : list[str], **dict):
-  tokenizer = dict['tokenizer']
-  for text in text_list:
-    for i in range(1, len(text)):
-      if (text[:i] != " ") and (text[i:] != " "):
-        list.append(tokenizer(text[:i])["input_ids"] + tokenizer(text[i:])["input_ids"])
-
-
-def show_proba(proba, level = 0.01, nb_tokens = 10, decode = False, **dict):
-  '''From a probability, get the top-{nb_tokens} tokens that have more than {level} probability.'''
+def show_proba(proba : torch.Tensor, level : float = 0.01, nb_tokens : int = 10, decode : bool = False, **dict):
+  '''
+  From a probability, get the top-{nb_tokens} tokens that have more than {level} probability.
+  '''
   tokenizer = dict['tokenizer']
 
   if decode:
@@ -125,7 +120,7 @@ def show_proba(proba, level = 0.01, nb_tokens = 10, decode = False, **dict):
   return proba_token_list[-nb_tokens:]
 
 
-def finds_indices(example_tokens : list[list[int]], target_tokens : list[list[int], list[int]]):
+def finds_indices(example_tokens : list[list[Token]], target_tokens : list[list[Token], list[Token]]):
   '''
   Finds the occurences of the target inside the examples, but only the last one for each target.
   stream_indices : list[int], list of all streams where the target was detected.
