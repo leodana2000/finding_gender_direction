@@ -2,6 +2,7 @@
 
 import torch
 import numpy as np
+import random
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 cosim = torch.nn.CosineSimilarity(-1)
 
@@ -16,6 +17,13 @@ def concat_list(lst):
   for l in lst:
     new_lst += l
   return new_lst
+
+
+def select_rand(lst, nb_ex, seed):
+  assert nb_ex < len(lst)
+  random.seed(seed)
+  random.shuffle(lst)
+  return lst[:nb_ex]
 
 
 def transpose_list(lst):
