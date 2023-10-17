@@ -1,16 +1,27 @@
-#code to generate de test data
+#code to generate the test data
 import pandas as pd
 import hyperplane_computation.utils as utils
 
+'''
+Threshold is used so the names are 'real names'. 
+A lower threshold means weirder names, which may not be recognize as the belonging to the correct gender.
+'''
+
 D2 = pd.read_csv('Data/yob1880.csv')
-threshold = 20 #to only use the names that are 'real names'
+threshold = 20 
 Test_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name'].values.tolist()
 Test_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name'].values.tolist()
 eos_token = '<|endoftext|>'
 
-#female sentences
 
-#evaluation prompt
+'''
+Creation of the datasets.
+A: female nouns,
+B: male nouns,
+C: female names,
+D: male names,
+'''
+
 example_prompts_A = ['The young lady is talented and is a musician. Answer:',
        'The actress is skilled and performed flawlessly. Answer:',
        'The daughter is intelligent and loves to read. Answer:',
@@ -30,8 +41,6 @@ example_prompts_A = ['The young lady is talented and is a musician. Answer:',
        'The girl is imaginative and creates fantastic stories. Answer:',
        ]
 
-
-#use "" to ask for the last token
 target_text_A = [
     ' lady',
     ' actress',
@@ -70,9 +79,6 @@ example_prompts_A = [eos_token
 
 
 
-#male sentences
-
-#evaluation prompt
 example_prompts_B = [
         'The young lord is talented. Answer:',
         'The actor is skilled. Answer:',
@@ -90,8 +96,6 @@ example_prompts_B = [
         'The boy is imaginative and creates fantastic stories. Answer:',
         ]
 
-
-#use "" to ask for the last token
 target_text_B = [
     ' lord',
     ' actor',
@@ -127,12 +131,8 @@ example_prompts_B = [eos_token
 
 
 
-#female names
-
-#evaluation prompt: checked that all prompt are understood by GPT2-xl
 example_prompts_C = ['Hi, my name is ' + name + '. Answer:' for name in Test_f]
 
-#use "" to ask for the last token
 target_text_C = [" " + name for name in Test_f]
 target_text_C += target_text_C
 
@@ -153,14 +153,8 @@ example_prompts_C = [eos_token
 
 
 
-
-#male names
-#!! gpt2-xl doesn't recognize correctly all of them !!
-
-#evaluation prompt: checked that all prompt are understood by GPT2-xl
 example_prompts_D = ['Hi, my name is ' + name + '. Answer:' for name in Test_m]
 
-#use "" to ask for the last token
 target_text_D = [' ' + name for name in Test_m]
 target_text_D += target_text_D
 
@@ -179,10 +173,13 @@ example_prompts_D = [eos_token
                      + pre_prompt_b
                      + example for example in example_prompts_D]
 
+
+
 D = {
     'question': example_prompts_A + example_prompts_B + example_prompts_C + example_prompts_D,
     'data_num': ['a']*len(example_prompts_A) + ['b']*len(example_prompts_B) + ['c']*len(example_prompts_C) + ['d']*len(example_prompts_D),
     'target': target_text_A + target_text_B + target_text_C + target_text_D,
+    'bin': [-1]*len(example_prompts_A) + [1]*len(example_prompts_B) + [-1]*len(example_prompts_C) + [1]*len(example_prompts_D)
 }
 DF = pd.DataFrame.from_dict(D, orient = 'columns')
 pd.DataFrame.to_csv(DF, "Data/Test_Data.csv")

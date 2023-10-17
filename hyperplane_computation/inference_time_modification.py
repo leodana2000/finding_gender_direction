@@ -56,9 +56,8 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
   return torch.cat(score, dim=0)
 
 
-#Initiate a fast way to compute the score, that doesn't involves looking at tokens of length > 1.
-def score(example_prompts : list[list[str]], logit_target : list[list[int]], leace_list : list[LeaceEraser],
-          leace_res_list : list[LeaceEraser], modif_target : list[list[int]], layer_list : list[list[int]], 
+def score(examples : list[list[str]], logit_target : list[list[int]], leace_list : list[LeaceEraser],
+          leace_res_list : list[LeaceEraser], layer_list : list[list[int]], 
           layer_res_list : list[int], lbds : torch.Tensor = torch.Tensor([1]), **dict):
   '''
   This function returns the probabilities of each answer for each example and each lambda.
@@ -67,17 +66,17 @@ def score(example_prompts : list[list[str]], logit_target : list[list[int]], lea
   device = dict['device']
 
   score = []
-  for i, (ex_batch, tar_batch) in enumerate(zip(example_prompts, modif_target)):
+  for i, ex_bin_tar in enumerate(examples):
     #We measure the length of each example to know where the answer is.
-    tokens_batch = [tokenizer(ex).input_ids for ex in ex_batch]
+    tokens_batch = [tokenizer(ex).input_ids for ex in ex_bin_tar[0]]
     len_examples = torch.Tensor([len(tokens)-1 for tokens in tokens_batch]).to(int)
 
     #We create a list of all the position where to do the hook.
     #We only hook the last example of the modif_target.
-    indices = utils.finds_indices(tokens_batch, tar_batch) #stream, example, stream_example
+    indices = utils.finds_indices(tokens_batch, tokenizer(ex_bin_tar[2]).input_ids) #stream, example, stream_example
 
     #We tokenize all example together, with padding, to be faster.
-    example_tokens = tokenizer(ex_batch, padding = True, return_tensors = 'pt').input_ids.to(device)
+    example_tokens = tokenizer(ex_bin_tar[0], padding = True, return_tensors = 'pt').input_ids.to(device)
 
     #We compute the score for this batch
     batch_score = []
@@ -87,19 +86,33 @@ def score(example_prompts : list[list[str]], logit_target : list[list[int]], lea
       meta_hook = hook_attn(indices)
       batch_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
                                       len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
+    
     score.append(torch.cat(batch_score, dim=0))
 
   del example_tokens
   del len_examples
   del indices
+  del tokens_batch
 
-  print(score[0].shape)
+  return compute_proba_acc(score, examples)
 
-  #invert the dimensions (batch, lbds, bin, nb_ex) -> (lbds, bin, nb_ex*batch)
-  final_score = utils.transpose_list(score)
+def compute_proba_acc(score, examples):
+  '''
+  Computes the probability and accuracy for each lbds, using bin to indicate which gender was the right one.
+  '''
+  bin = torch.cat([torch.Tensor(ex_bin_tar[1]) for ex_bin_tar in examples], dim=0)
+  print(score)
+  score = torch.cat([torch.transpose(t_batch, 0, 2) for t_batch in score], dim=0)
+  score = torch.transpose(torch.transpose(score, 0, 2), 0, 1)
 
-  return final_score
-
+  acc = torch.mean(((score[1] - score[0])*bin > 0).to(int), dim=-1, dtype=float)
+  pos_ex = (bin > 0).to(int)
+  neg_ex = 1 - pos_ex
+  proba = torch.cat([(torch.mean(score[0]*pos_ex, dim=-1) + torch.mean(score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
+                     (torch.mean(score[0]*neg_ex, dim=-1) + torch.mean(score[1]*pos_ex, dim=-1)).unsqueeze(-1)], dim=-1)
+  
+  return proba.T, acc
+  
 
 #ToDo: make it more general!
 def attn_forward(module,

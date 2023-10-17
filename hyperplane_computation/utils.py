@@ -26,18 +26,6 @@ def select_rand(lst, nb_ex, seed):
   return lst[:nb_ex]
 
 
-def transpose_list(lst):
-  final_lst = []
-  for t_batch in lst:
-    t_batch = torch.transpose(t_batch, 0, 2)
-    final_lst.append(t_batch)
-    
-  final_lst = torch.cat(final_lst, dim=0)
-  final_lst = torch.transpose(final_lst, 0, 2)
-
-  return final_lst
-
-
 def initiate_activations(dataset : list[list[Data, list[Bin]]], **dict):
   device = dict['device']
   model = dict['model']
