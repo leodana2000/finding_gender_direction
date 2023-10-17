@@ -20,14 +20,12 @@ def concat_list(lst):
 
 def transpose_list(lst):
   final_lst = []
-  for batch in lst:
-    np_batch = np.array(batch.to('cpu'))
-    np_batch = np.transpose(np_batch, (2, 1, 0))
-    final_lst.append(np_batch)
+  for t_batch in lst:
+    t_batch = torch.transpose(t_batch, 0, 2)
+    final_lst.append(t_batch)
     
-  np.concatenate(final_lst, 0)
-  final_lst = np.concatenate(final_lst, 0)
-  final_lst = np.transpose(final_lst, (2, 1, 0))
+  final_lst = torch.cat(final_lst, dim=0)
+  final_lst = torch.transpose(final_lst, 0, 2)
 
   return final_lst
 

@@ -53,7 +53,7 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
   del male_proba
   del female_proba
 
-  return score
+  return torch.cat(score, dim=0)
 
 
 #Initiate a fast way to compute the score, that doesn't involves looking at tokens of length > 1.
@@ -87,11 +87,13 @@ def score(example_prompts : list[list[str]], logit_target : list[list[int]], lea
       meta_hook = hook_attn(indices)
       batch_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
                                       len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
-    score.append(batch_score)
+    score.append(torch.cat(batch_score, dim=0))
 
   del example_tokens
   del len_examples
   del indices
+
+  print(score[0].shape)
 
   #invert the dimensions (batch, lbds, bin, nb_ex) -> (lbds, bin, nb_ex*batch)
   final_score = utils.transpose_list(score)
