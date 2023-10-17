@@ -20,9 +20,8 @@ def concat_list(lst):
 
 def transpose_list(lst):
   final_lst = []
-  lst = lst.to('cpu')
   for batch in lst:
-    np_batch = np.array(batch)
+    np_batch = np.array(batch.to('cpu'))
     np_batch = np.transpose(np_batch, (2, 1, 0))
     final_lst.append(np_batch)
     
