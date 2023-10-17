@@ -107,7 +107,7 @@ def compute_proba_acc(score, examples, **dict):
   score = torch.cat([torch.transpose(t_batch, 0, 2) for t_batch in score], dim=0)
   score = torch.transpose(torch.transpose(score, 0, 2), 0, 1)
 
-  acc = torch.mean(((score[1] - score[0])*bin > 0).to(int), dim=-1, dtype=float)
+  acc = torch.mean(((score[0] - score[1])*bin > 0).to(int), dim=-1, dtype=float)
   pos_ex = (bin > 0).to(int)
   neg_ex = 1 - pos_ex
   proba = torch.cat([(torch.mean(score[0]*pos_ex, dim=-1) + torch.mean(score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
