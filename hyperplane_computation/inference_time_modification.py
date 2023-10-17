@@ -94,13 +94,15 @@ def score(examples : list[list[str]], logit_target : list[list[int]], leace_list
   del indices
   del tokens_batch
 
-  return compute_proba_acc(score, examples)
+  return compute_proba_acc(score, examples, **dict)
 
-def compute_proba_acc(score, examples):
+def compute_proba_acc(score, examples, **dict):
   '''
   Computes the probability and accuracy for each lbds, using bin to indicate which gender was the right one.
   '''
-  bin = torch.cat([torch.Tensor(ex_bin_tar[1]) for ex_bin_tar in examples], dim=0)
+  device = dict['device']
+
+  bin = torch.cat([torch.Tensor(ex_bin_tar[1]) for ex_bin_tar in examples], dim=0).to(device)
   print(score)
   score = torch.cat([torch.transpose(t_batch, 0, 2) for t_batch in score], dim=0)
   score = torch.transpose(torch.transpose(score, 0, 2), 0, 1)
