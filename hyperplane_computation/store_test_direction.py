@@ -3,7 +3,9 @@ from tqdm import tqdm
 from hyperplane_computation.concept_erasure import leace
 from sklearn.linear_model import LogisticRegression
 
-#ToDo: doesn't work with newest version
+#WARNING & ToDo: doesn't work yet.
+
+
 def storing_directions(meta_dataset : list[list], post_layer_norm = True, **dict):
   device = dict['device']
   model = dict['model']

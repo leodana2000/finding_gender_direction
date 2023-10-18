@@ -1,4 +1,4 @@
-#code to generate the test data
+#Code to generate de test data, run init_dataset.py to generate it.
 import pandas as pd
 import hyperplane_computation.utils as utils
 
@@ -7,7 +7,7 @@ Threshold is used so the names are 'real names'.
 A lower threshold means weirder names, which may not be recognize as the belonging to the correct gender.
 '''
 
-D2 = pd.read_csv('Data/yob1880.csv')
+D2 = pd.read_csv('Data/gendered_names.csv')
 threshold = 20 
 Test_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name'].values.tolist()
 Test_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name'].values.tolist()
@@ -20,6 +20,12 @@ A: female nouns,
 B: male nouns,
 C: female names,
 D: male names,
+
+For each dataset, we have a list of sentences that should be answered by a gendered word.
+Each sentence has one targeted word on which we use the intervention.
+We also have a pre-prompt and few shot example to make the model understand its task.
+Each sentences is used with both ordering of the few shots to avoid biases.
+All sentences with pre-prompt and few-shots were tested and have a higher probability of True answer.
 '''
 
 example_prompts_A = ['The young lady is talented and is a musician. Answer:',

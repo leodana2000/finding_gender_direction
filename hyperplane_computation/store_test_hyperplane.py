@@ -1,6 +1,4 @@
-#code that contains the functions to store and evaluate hyperplanes and directions
-#You can use them in the notebook
-
+# code that contains the functions to store and evaluate hyperplanes and directions
 import torch
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
@@ -9,8 +7,12 @@ from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure import leace
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 
+Bin = 1 | 0 | -1
+Label = list[Bin]
+Data = str
 
-def storing_hyperplanes(dataset : list[list[str, list[int]]], post_layer_norm=True, learn_probe=False, **dict) -> tuple[list[LeaceEraser]]:
+
+def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True, learn_probe=False, **dict) -> tuple[list[LeaceEraser]]:
   '''
   Computes hyperplanes for the difference in mean, diff-mean quantile and Logisticregression method.
   The dataset is batched, and its elements are composed of:
@@ -25,11 +27,10 @@ def storing_hyperplanes(dataset : list[list[str, list[int]]], post_layer_norm=Tr
   device = dict['device']
   model = dict['model']
 
-  N_batch = len(dataset)
-
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
   all_labels = torch.cat(labels, dim = 0).squeeze().unsqueeze(-1)
 
+  N_batch = len(dataset)
   dim_label = all_labels.shape[1]
   dim_residual = activations[0].shape[-1]
 
@@ -38,32 +39,28 @@ def storing_hyperplanes(dataset : list[list[str, list[int]]], post_layer_norm=Tr
   eraser_probe = []
 
   for layer in tqdm(range(len(model.transformer.h))):
-    #Initiating the leace estimator, default parameters.
-    leace_fitter = leace.LeaceFitter(dim_residual, dim_label)
+    leace_fitter = leace.LeaceFitter(dim_residual, dim_label) # default parameters
 
     activations, target_activations = utils.gather_update_acts(activations, layer, post_layer_norm, indices, N_batch, **dict)
 
     all_target_act = torch.cat(target_activations, dim = 0)
     leace_fitter.update(all_target_act, all_labels)
 
-    #We only keep the eraser. The rest is not useful anymore.
+    # We only keep the eraser. The rest is not useful anymore and takes dim_residual**2 spaces.
     eraser = leace_fitter.eraser
     del leace_fitter
 
-    #We compute the quantile to have the equal-leace estimator.
-    quantile = utils.get_quantile(eraser, all_target_act, **dict).unsqueeze(0)
-
-    #ToDo: Update LEACE
     eraser_mean.append(eraser.to(device))
     eraser_quantile.append(leace.LeaceEraser(
         proj_right = eraser.proj_right,
         proj_left = eraser.proj_left,
-        bias = quantile,
+        bias = utils.get_quantile(eraser, all_target_act, **dict),
     ))
-    del eraser
     eraser_quantile[-1].to(device)
 
-    #Only recognize the gender direction
+    # Logistic Regression only works if we are after the layer-norm (otherwise the norm of the hyperplane explodes),
+    # and if the data is one-dimensionnal (otherwise it reduces dimensionnality). 
+    # ToDo: generalize to these cases.
     if post_layer_norm and learn_probe:
       probe_labels = torch.sum(all_labels, dim=-1)
 
@@ -79,37 +76,40 @@ def storing_hyperplanes(dataset : list[list[str, list[int]]], post_layer_norm=Tr
       ))
       eraser_probe[-1].to(device)
 
-  #Deletion of all the useless tensor to avoid RAM overload.
       del probe
+    del eraser
     del target_activations
     del all_target_act
   del all_labels
   del activations
   del indices
   del labels
-
   return eraser_mean, eraser_quantile, eraser_probe
 
 
 
-def hyperplane_acc(dataset : list[list[str, list[int]]], eval_metric : list, **dict) -> list[list[float]]:
+def hyperplane_acc(dataset : list[list[Data, Label]], eval_metric : list, **dict) -> list[list[float]]:
+  '''
+  As storing_hyperplanes, takes a dataset of sentence to evaluate. 
+  The evaluation is a metric that computes on which side of the hyperplane the activation of the last token is.
+  It returns the accuracy of the metric (hyperplanes) at each layer.
+  We only allow accuracy to be computed after the layer-norm, but one could overwrite this and use it in the residual.
+  '''
   device = dict['device']
   model = dict['model']
 
-  N_batch = len(dataset)
-
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
-
   all_labels = torch.cat(labels, dim=0).to(device)
+
+  N_batch = len(dataset)
+  post_layer_norm = True
 
   acc_list = []
   for layer in tqdm(range(len(model.transformer.h))):
 
-    activations, target_activations = utils.gather_update_acts(activations, layer, True, indices, N_batch, **dict)
-
+    activations, target_activations = utils.gather_update_acts(activations, layer, post_layer_norm, indices, N_batch, **dict)
     all_target_acts = torch.cat(target_activations, dim = 0).to(device)
 
-    #at this layer, we evaluate the accuracy of all of the metrics
     acc = []
     for metric in eval_metric:
       acc.append(metric(all_target_acts, layer, all_labels))
@@ -120,7 +120,4 @@ def hyperplane_acc(dataset : list[list[str, list[int]]], eval_metric : list, **d
   del labels
   del all_target_acts
   del all_labels
-
-  #invert dim 0 and 1 to have [metric, layer]
-  acc_list = [[acc[i] for acc in acc_list] for i in range(len(acc_list[0]))]
-  return acc_list
+  return torch.Tensor(acc_list).T.to('cpu')
