@@ -151,7 +151,7 @@ def finds_indices(ex_batch : list[list[Token]], tar_batch : list[list[Token]]):
   stream_example_indices = [[],[]]
 
   for i, (ex, tar) in enumerate(zip(ex_batch, tar_batch)):
-    len_tar= len(tar)
+    len_tar = len(tar)
     len_ex = len(ex)
 
     # If there is no target, we take the last stream.
@@ -165,9 +165,8 @@ def finds_indices(ex_batch : list[list[Token]], tar_batch : list[list[Token]]):
     else:
       # [-1] means that we take only the last occurence in the sentence. 
       # ToDo: more general version that could account for any number of occurences.
-      position = torch.where(torch.Tensor(ex) == tar[0])[0][-1].item()
+      position = torch.where(torch.Tensor(ex) == torch.Tensor([tar[0]]))[0][-1].item()
       if [ex[i] for i in range(position, position + len_tar)] == tar:
-
         s_indice = torch.Tensor([pos for pos in range(position, position + len_tar)])
         e_indice = torch.Tensor([i]*len_tar)
         stream_example_indices[0].append(position + len_tar - 1)

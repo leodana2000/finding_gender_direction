@@ -10,18 +10,18 @@ Data = str
 Token = int
 
 
-def score(examples : list[list[Data], list[Bin], list[str]],
+def score(examples : list[list[Data], list[Bin], list[Data]],
           logit_target : [list[Token], list[Token]], 
           leace_list : list[LeaceEraser], 
           leace_res_list : list[LeaceEraser], 
           layer_list : list[list[int]], 
           layer_res_list : list[int], 
-          lbds : torch.Tensor = torch.Tensor([0]), 
+          lbds : torch.Tensor, 
           **dict):
   '''
   This function returns the probabilities of each binary answers, for each examples and for each lambdas.
-  example: Batched list containing the questions, their binary label, and the target string of where to modify the attention,
-  logit_target: list of logits that are considered valid answers for each label,
+  examples: batched list containing the questions, their binary label, and the target string of where to modify the attention,
+  logit_target: list of logits ids that are considered valid answers for each label,
   leace_list: list of hyperplane to use after the layer-norm,
   leace_res_lsit: list of hyperplanes to use in the residual stream,
   layer_list: list of layers at which to intervene on the attention intervention,
@@ -35,31 +35,34 @@ def score(examples : list[list[Data], list[Bin], list[str]],
 
   score = []
   for i, ex_bin_tar in enumerate(examples):
+    print("Batch {}.".format(i))
+
     # We measure the length of each example to know where the answer is.
-    tokens_batch = [tokenizer(ex).input_ids for ex in ex_bin_tar[0]]
-    len_examples = torch.Tensor([len(tokens)-1 for tokens in tokens_batch]).to(int)
+    ex_tokens = [tokenizer(ex).input_ids for ex in ex_bin_tar[0]]
+    tar_tokens = [tokenizer(tar).input_ids for tar in ex_bin_tar[2]]
 
     # We create a list of all the position where to do the hook.
     # We only hook the last example of ex_bin_tar[2].
-    indices = utils.finds_indices(tokens_batch, tokenizer(ex_bin_tar[2]).input_ids) #stream, example, stream_example
+    indices = utils.finds_indices(ex_tokens, tar_tokens)
+    len_examples = torch.Tensor([len(tokens)-1 for tokens in ex_tokens]).to(int)
 
     example_tokens = tokenizer(ex_bin_tar[0], padding = True, return_tensors = 'pt').input_ids.to(device)
 
     # We compute the score for this batch
-    batch_score = []
-    print("Batch {}.".format(i))
+    lbds_score = []
+    meta_hook = hook_attn(indices)
     for lbd in tqdm(lbds):
       hook = hook_wte(lbd, indices)
-      meta_hook = hook_attn(indices)
-      batch_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
+      lbds_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
                                       len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
     
-    score.append(torch.cat(batch_score, dim=0))
+    score.append(torch.cat(lbds_score, dim=0))
 
   del example_tokens
   del len_examples
   del indices
-  del tokens_batch
+  del ex_tokens
+  del tar_tokens
 
   # score has shape [batch, lbds, experiments, binary, questions]
   return compute_proba_acc(score, examples, **dict)
@@ -170,22 +173,18 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
 
   score = []
   for layers, layers_res in zip(layer_list, layer_res_list):
-    for layer in layers:
+    for layer, layer_res in zip(layers, layers_res):
       model.transformer.h[layer].attn.register_forward_hook(meta_hook(hook(leace_list[layer])))
-
-    for layer in layers_res:
-      model.transformer.h[layer].attn.register_forward_pre_hook(hook(leace_res_list[layer]))
+      model.transformer.h[layer_res].attn.register_forward_pre_hook(hook(leace_res_list[layer_res]))
 
     probas = torch.softmax(model(example_tokens).logits, dim = -1)
 
     male_proba = diag_proba(logit_target[0], len_example, probas)
     female_proba = diag_proba(logit_target[1], len_example, probas)
 
-    for layer in layers:
+    for layer, layer_res in zip(layers, layers_res):
       model.transformer.h[layer].attn._forward_hooks.clear()
-
-    for layer in layers_res:
-      model.transformer.h[layer].attn._forward_pre_hooks.clear()
+      model.transformer.h[layer_res].attn._forward_pre_hooks.clear()
 
     score.append(torch.cat([male_proba, female_proba], dim = 0).unsqueeze(0))
   score = torch.cat(score, dim=0).unsqueeze(0)
