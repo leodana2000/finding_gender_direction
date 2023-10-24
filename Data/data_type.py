@@ -8,8 +8,8 @@ class DataStorage:
         A class to easily use the data to learn conceptual directions (hyperplanes). It takes a DataFrame with columns:
         - 'sentences' : the list of all sentencesthat are going to be used for training. 
             The last token is the only on on which the hyperplane is learnt.
-        - 'label' : names for classes that are meaningfully differents, for example 'pronouns', 'nouns', 'names'. You can
-            you can learn them separatly.
+        - 'label' : names for classes that are meaningfully different, for example 'pronouns', 'nouns', 'names'. You can
+            you can learn them separately.
         - 'bin' : a binary variable, to identify a concept and its opposite, for example 'male' and 'female'. They should
              be represented by +1 or -1.
         '''
@@ -46,7 +46,7 @@ class DataStorage:
     def init_train_test(self) -> None:
         '''
         Initialise which data will be in training and which will be in test.
-        We garantee the same proportion of train and test for each class.
+        We guarantee the same proportion of train and test for each class.
         '''
         random.seed(self.rand_seed)
         self.is_training = [True]*len(self.data['examples'])
