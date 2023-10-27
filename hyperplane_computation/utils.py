@@ -11,14 +11,6 @@ Data = str
 Token = int
 
 
-def concat_list(lst):
-    """Concatenates all the lists in a list."""
-    new_lst = []
-    for l in lst:
-        new_lst += l
-    return new_lst
-
-
 def select_rand(lst, nb_ex, seed):
     """Randomly selects nb_ex elements of the list."""
     assert nb_ex < len(lst)
