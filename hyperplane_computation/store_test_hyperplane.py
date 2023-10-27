@@ -1,5 +1,5 @@
 # code that contains the functions to store and evaluate hyperplanes and directions
-import torch
+import torch as t
 from tqdm import tqdm
 from sklearn.linear_model import LogisticRegression
 
@@ -28,7 +28,7 @@ def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True,
   model = dict['model']
 
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
-  all_labels = torch.cat(labels, dim = 0).squeeze().unsqueeze(-1)
+  all_labels = t.cat(labels, dim = 0).squeeze().unsqueeze(-1)
 
   N_batch = len(dataset)
   dim_label = all_labels.shape[1]
@@ -43,7 +43,7 @@ def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True,
 
     activations, target_activations = utils.gather_update_acts(activations, layer, post_layer_norm, indices, N_batch, **dict)
 
-    all_target_act = torch.cat(target_activations, dim = 0)
+    all_target_act = t.cat(target_activations, dim = 0)
     leace_fitter.update(all_target_act, all_labels)
 
     # We only keep the eraser. The rest is not useful anymore and takes dim_residual**2 spaces.
@@ -62,7 +62,7 @@ def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True,
     # and if the data is one-dimensionnal (otherwise it reduces dimensionnality). 
     # ToDo: generalize to these cases.
     if post_layer_norm and learn_probe:
-      probe_labels = torch.sum(all_labels, dim=-1)
+      probe_labels = t.sum(all_labels, dim=-1)
 
       probe = LogisticRegression(random_state=0, max_iter=2000,).fit(
               all_target_act.to('cpu'),
@@ -70,9 +70,9 @@ def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True,
               )
 
       eraser_probe.append(leace.LeaceEraser(
-          proj_right = torch.Tensor(probe.coef_),
-          proj_left = ((torch.Tensor(probe.coef_)/(torch.norm(torch.Tensor(probe.coef_), dim = -1)**2).unsqueeze(-1)).T),
-          bias = -probe.intercept_[0]*(torch.Tensor(probe.coef_)/(torch.norm(torch.Tensor(probe.coef_), dim = -1).unsqueeze(-1)**2)),
+          proj_right = t.tensor(probe.coef_, dtype=t.float),
+          proj_left = ((t.Tensor(probe.coef_)/(t.norm(t.tensor(probe.coef_, dtype=t.float), dim = -1)**2).unsqueeze(-1)).T),
+          bias = -probe.intercept_[0]*(t.Tensor(probe.coef_)/(t.norm(t.tensor(probe.coef_, dtype=t.float), dim = -1).unsqueeze(-1)**2)),
       ))
       eraser_probe[-1].to(device)
 
@@ -99,7 +99,7 @@ def hyperplane_acc(dataset : list[list[Data, Label]], eval_metric : list, **dict
   model = dict['model']
 
   indices, activations, labels = utils.initiate_activations(dataset, **dict)
-  all_labels = torch.cat(labels, dim=0).to(device)
+  all_labels = t.cat(labels, dim=0).to(device)
 
   N_batch = len(dataset)
   post_layer_norm = True
@@ -108,7 +108,7 @@ def hyperplane_acc(dataset : list[list[Data, Label]], eval_metric : list, **dict
   for layer in tqdm(range(len(model.transformer.h))):
 
     activations, target_activations = utils.gather_update_acts(activations, layer, post_layer_norm, indices, N_batch, **dict)
-    all_target_acts = torch.cat(target_activations, dim = 0).to(device)
+    all_target_acts = t.cat(target_activations, dim = 0).to(device)
 
     acc = []
     for metric in eval_metric:
@@ -120,4 +120,4 @@ def hyperplane_acc(dataset : list[list[Data, Label]], eval_metric : list, **dict
   del labels
   del all_target_acts
   del all_labels
-  return torch.Tensor(acc_list).T.to('cpu')
+  return t.tensor(acc_list, dtype=t.float, device='cpu').T

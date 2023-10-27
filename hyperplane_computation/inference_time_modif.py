@@ -1,6 +1,6 @@
 # Code that contains all the functions performing the inference-time-modification.
 
-import torch
+import torch as t 
 from tqdm import tqdm
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
@@ -16,7 +16,7 @@ def score(examples : list[list[Data], list[Bin], list[Data]],
           leace_res_list : list[LeaceEraser], 
           layer_list : list[list[int]], 
           layer_res_list : list[int], 
-          lbds : torch.Tensor, 
+          lbds : t.Tensor, 
           **dict):
   '''
   This function returns the probabilities of each binary answers, for each examples and for each lambdas.
@@ -44,7 +44,7 @@ def score(examples : list[list[Data], list[Bin], list[Data]],
     # We create a list of all the position where to do the hook.
     # We only hook the last example of ex_bin_tar[2].
     indices = utils.finds_indices(ex_tokens, tar_tokens)
-    len_examples = torch.Tensor([len(tokens)-1 for tokens in ex_tokens]).to(int)
+    len_examples = t.tensor([len(tokens)-1 for tokens in ex_tokens], dtype=t.int)
 
     example_tokens = tokenizer(ex_bin_tar[0], padding = True, return_tensors = 'pt').input_ids.to(device)
 
@@ -56,7 +56,7 @@ def score(examples : list[list[Data], list[Bin], list[Data]],
       lbds_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
                                       len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
     
-    score.append(torch.cat(lbds_score, dim=0))
+    score.append(t.cat(lbds_score, dim=0))
 
   del example_tokens
   del len_examples
@@ -129,8 +129,8 @@ def attn_forward(module,
     if stream in stream_example_indices[0]:
 
       # list of all examples where to hook
-      example_ind = stream_example_indices[1][torch.where(stream_example_indices[0] == stream)[0]]
-      target_indices = torch.cat([torch.where(example_indices == ex)[0] for ex in example_ind], dim = 0)
+      example_ind = stream_example_indices[1][t.where(stream_example_indices[0] == stream)[0]]
+      target_indices = t.cat([t.where(example_indices == ex)[0] for ex in example_ind], dim = 0)
       example_ind = example_indices[target_indices]
       stream_ind = stream_indices[target_indices]
 
@@ -150,7 +150,7 @@ def attn_forward(module,
   attn_outputs, _ = module._attn(query, key, value)
   a.append(attn_outputs[:, :, last_stream:])
 
-  a = torch.cat(a, dim = 2)
+  a = t.cat(a, dim = 2)
   a = module._merge_heads(a, module.num_heads, module.head_dim)
   a = module.c_proj(a)
 
@@ -177,7 +177,7 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
       model.transformer.h[layer].attn.register_forward_hook(meta_hook(hook(leace_list[layer])))
       model.transformer.h[layer_res].attn.register_forward_pre_hook(hook(leace_res_list[layer_res]))
 
-    probas = torch.softmax(model(example_tokens).logits, dim = -1)
+    probas = t.softmax(model(example_tokens).logits, dim = -1)
 
     male_proba = diag_proba(logit_target[0], len_example, probas)
     female_proba = diag_proba(logit_target[1], len_example, probas)
@@ -186,8 +186,8 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
       model.transformer.h[layer].attn._forward_hooks.clear()
       model.transformer.h[layer_res].attn._forward_pre_hooks.clear()
 
-    score.append(torch.cat([male_proba, female_proba], dim = 0).unsqueeze(0))
-  score = torch.cat(score, dim=0).unsqueeze(0)
+    score.append(t.cat([male_proba, female_proba], dim = 0).unsqueeze(0))
+  score = t.cat(score, dim=0).unsqueeze(0)
 
   del probas
   del male_proba
@@ -201,25 +201,25 @@ def diag_proba(logit_target, len_example, proba):
   [diag, len_example] is the diagonal saying for each example, where to look for the probability.
   [:, logit_target] says to consider only the target tokens to compute the probability.
   '''
-  diag = torch.arange(len(len_example))
-  return torch.sum(proba[diag, len_example][:, logit_target].squeeze(-1), dim = -1).unsqueeze(0)
+  diag = t.arange(len(len_example))
+  return t.sum(proba[diag, len_example][:, logit_target].squeeze(-1), dim = -1).unsqueeze(0)
 
 
-def compute_proba_acc(score : list[torch.Tensor], examples : list[list[Data], list[Bin], list[str]], **dict):
+def compute_proba_acc(score : list[t.Tensor], examples : list[list[Data], list[Bin], list[str]], **dict):
   '''
   Computes the probability and accuracy for each lbds, using bin to indicate which gender was the right one.
   '''
   device = dict['device']
 
   # score has shape [batch, lbds, experiments, binary, questions]
-  bin = torch.cat([torch.Tensor(ex_bin_tar[1]) for ex_bin_tar in examples], dim=0).to(device)
-  score = torch.cat([torch.transpose(t_batch, 0, 3) for t_batch in score], dim=0)
-  score = torch.transpose(torch.transpose(score, 0, 3), 0, 2)
+  bin = t.cat([t.tensor(ex_bin_tar[1], dtype=t.int) for ex_bin_tar in examples], dim=0).to(device)
+  score = t.cat([t.transpose(t_batch, 0, 3) for t_batch in score], dim=0)
+  score = t.transpose(t.transpose(score, 0, 3), 0, 2)
 
-  acc = torch.mean(((score[0] - score[1])*bin > 0).to(int), dim=-1, dtype=float)
+  acc = t.mean(((score[0] - score[1])*bin > 0).to(int), dim=-1, dtype=float)
   pos_ex = (bin > 0).to(int)
   neg_ex = 1 - pos_ex
-  proba = torch.cat([(torch.mean(score[0]*pos_ex, dim=-1) + torch.mean(score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
-                     (torch.mean(score[0]*neg_ex, dim=-1) + torch.mean(score[1]*pos_ex, dim=-1)).unsqueeze(-1)], dim=-1)
+  proba = t.cat([(t.mean(score[0]*pos_ex, dim=-1) + t.mean(score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
+                     (t.mean(score[0]*neg_ex, dim=-1) + t.mean(score[1]*pos_ex, dim=-1)).unsqueeze(-1)], dim=-1)
   
-  return torch.transpose(proba, 1, 2), acc
+  return t.transpose(proba, 1, 2), acc

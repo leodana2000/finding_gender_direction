@@ -1,6 +1,6 @@
 # Code containing functions used to compute the continuation of a sentence with the concept erasure method.
 
-import torch
+import torch as t
 from tqdm import tqdm
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
@@ -70,7 +70,7 @@ def continuate(examples : list[list[Data]],
     model = dict['model']
     tokenizer = dict['tokenizer']
     device = dict['device']
-    torch.manual_seed(seed)
+    t.manual_seed(seed)
   
     # Computation by batch.
     continuations = []

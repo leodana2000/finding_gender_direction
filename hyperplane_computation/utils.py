@@ -1,8 +1,7 @@
 # code containing all the useful functions for the notebook to run
 
 import random
-
-import torch
+import torch as t
 
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 
@@ -43,21 +42,23 @@ def initiate_activations(dataset: list[list[Data, Label]], **dict):
 
     for batch in dataset:
         indices.append(
-            torch.Tensor([len(tokenizer(data[0])["input_ids"]) - 1 for data in batch])
-            .to(int)
-            .to(device)
+            t.tensor(
+                [len(tokenizer(data[0])["input_ids"]) - 1 for data in batch], 
+                dtype=t.int, 
+                device=device
+            )
         )
 
         tokenized_batch = tokenizer(
             [data[0] for data in batch], padding=True, return_tensors="pt"
         )["input_ids"].to(device)
         positions = (
-            torch.arange(tokenized_batch.shape[1]).to(int).to(device).to(int).to(device)
+            t.arange(tokenized_batch.shape[1]).to(int).to(device).to(int).to(device)
         )
         activations.append(
             model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions)
         )
-        labels.append(torch.Tensor([data[1] for data in batch]))
+        labels.append(t.tensor([data[1] for data in batch], dtype=t.float))
 
     del positions
     del tokenized_batch
@@ -65,17 +66,18 @@ def initiate_activations(dataset: list[list[Data, Label]], **dict):
 
 
 def gather_update_acts(
-    activations: list[torch.Tensor],
+    activations: list[t.Tensor],
     layer: int,
     post_layer_norm: bool,
-    indices: list[torch.Tensor],
+    indices: list[t.Tensor],
     N_batch: int,
     **dict
 ):
     """
-  Updates all the activations by passing them throughout the layer.
-  Then gathers the activations on which we will learn the hyperplane.
-  """
+    Updates all the activations by passing them throughout the layer.
+    Then gathers the activations on which we will learn the hyperplane.
+    """
+
     model = dict["model"]
     device = dict["device"]
 
@@ -96,7 +98,7 @@ def gather_update_acts(
 
         # We gather the activations that have the right indices, corresponding to the last token of the initial sentence.
         target_activations.append(
-            torch.cat(
+            t.cat(
                 [act[ind].unsqueeze(0) for act, ind in zip(acts, indices[batch_num])],
                 dim=0,
             ).to(device)
@@ -107,7 +109,7 @@ def gather_update_acts(
 
 
 # ToDo: Implement a better version, using means of median
-def get_quantile(leace_eraser: LeaceEraser, all_acts: torch.Tensor, **dict):
+def get_quantile(leace_eraser: LeaceEraser, all_acts: t.Tensor, **dict):
     """
   Computes the median bias instead of the mean, and returns it.
   The formula is Quantile = delta-quantile(<hyperplane|all_acts>)*hyperplane ()when hyperplane is normed.
@@ -118,13 +120,13 @@ def get_quantile(leace_eraser: LeaceEraser, all_acts: torch.Tensor, **dict):
     hyperplane = (
         (
             leace_eraser.proj_right[0]
-            / torch.norm(leace_eraser.proj_right[0], dim=-1).unsqueeze(-1)
+            / t.norm(leace_eraser.proj_right[0], dim=-1).unsqueeze(-1)
         )
         .squeeze()
         .to(device)
     )
-    sorted_tensor, _ = torch.sort(
-        torch.einsum("nd, ...d -> n...", all_acts, hyperplane), dim=-1
+    sorted_tensor, _ = t.sort(
+        t.einsum("nd, ...d -> n...", all_acts, hyperplane), dim=-1
     )
     quantile = (
         (sorted_tensor[Nb_ex // 2 + 1] + sorted_tensor[(Nb_ex - 1) // 2 + 1])
@@ -141,9 +143,9 @@ def probe_eval(erasers: list[LeaceEraser], **dict):
   Initiate a function that will evaluate activations using different hyperplanes for each layers.
   """
     device = dict["device"]
-    cosim = torch.nn.CosineSimilarity(-1)
+    cosim = t.nn.CosineSimilarity(-1)
 
-    def metric(all_acts: torch.Tensor, layer: int, true_label: torch.Tensor):
+    def metric(all_acts: t.Tensor, layer: int, true_label: t.Tensor):
         """
     Evaluate on which side of the hyperplane the activations are, and return the accuracy of the hyperplane.
     """
@@ -151,14 +153,14 @@ def probe_eval(erasers: list[LeaceEraser], **dict):
         bias = erasers[layer].bias.to(device)
         Nb_ex = len(all_acts)
 
-        acc = torch.sum(cosim(true_label @ dir, all_acts - bias) > 0).item() / Nb_ex
+        acc = t.sum(cosim(true_label @ dir, all_acts - bias) > 0).item() / Nb_ex
         return acc
 
     return metric
 
 
 def show_proba(
-    proba: torch.Tensor,
+    proba: t.Tensor,
     level: float = 0.01,
     nb_tokens: int = 10,
     decode: bool = False,
@@ -205,8 +207,8 @@ def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
 
         # If there is no target, we take the last stream.
         if len_tar == 0:
-            s_indice = torch.Tensor([len_ex])
-            e_indice = torch.Tensor([i])
+            s_indice = t.tensor([len_ex], dtype=t.int)
+            e_indice = t.tensor([i], dtype=t.int)
             stream_example_indices[0].append(len_ex)
             stream_example_indices[1].append(i)
 
@@ -214,14 +216,15 @@ def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
         else:
             # [-1] means that we take only the last occurrence in the sentence.
             # ToDo: more general version that could account for any number of occurrences.
-            position = torch.where(torch.Tensor(ex) == torch.Tensor([tar[0]]))[0][
+            position = t.where(t.tensor(ex, dtype=t.int) == t.tensor([tar[0]], dtype=t.int))[0][
                 -1
             ].item()
             if [ex[i] for i in range(position, position + len_tar)] == tar:
-                s_indice = torch.Tensor(
-                    [pos for pos in range(position, position + len_tar)]
+                s_indice = t.tensor(
+                    [pos for pos in range(position, position + len_tar)],
+                    dtype=t.int,
                 )
-                e_indice = torch.Tensor([i] * len_tar)
+                e_indice = t.tensor([i] * len_tar, dtype=t.int)
                 stream_example_indices[0].append(position + len_tar - 1)
                 stream_example_indices[1].append(i)
             else:
@@ -231,7 +234,7 @@ def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
         example_indices.append(e_indice)
 
     return [
-        torch.cat(stream_indices, dim=0).to(int),
-        torch.cat(example_indices, dim=0).to(int),
-        torch.Tensor(stream_example_indices).to(int),
+        t.cat(stream_indices, dim=0, dtype=t.int),
+        t.cat(example_indices, dim=0, dtype=t.int),
+        t.tensor(stream_example_indices, dtype=t.int),
     ]
