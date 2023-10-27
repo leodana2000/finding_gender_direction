@@ -65,13 +65,14 @@ class DataStorage:
                     index += 1
 
 
-    def batch(self, list : list[str]) -> list[list[str]]:
+    def batch(self, unbatched : list[str]) -> list[list[str]]:
         '''
         Transform the data into subsets of size at most bach_size.
         '''
-        Nb_ex = len(list)
+        Nb_ex = len(unbatched)
         Nb_batch = Nb_ex//self.batch_size + 1
-        return [list[i*self.batch_size:min((i+1)*self.batch_size, Nb_ex)] for i in range(Nb_batch)]
+        batched = [unbatched[i*self.batch_size:min((i+1)*self.batch_size, Nb_ex)] for i in range(Nb_batch)]
+        return batched
 
 
     def get_ex(self, method, multi_dim=True, label='all') -> list[list[str, list[int]]]:

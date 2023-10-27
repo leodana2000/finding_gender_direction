@@ -9,17 +9,17 @@ There is a total of 240 distinct pairs of gendered words.
 Each type of gendered word is embedded into different prompts.
 '''
 
-D1_noun_m = ['countryman',   'wizards', 'manservant',  'fathers', 'divo', 'actor',   'bachelor', 'papa', 'dukes',     'barman',   'countrymen',   'brideprice', 'hosts',     'airmen',   'prince',   'governors',   'abbot',  'men',   'widower', 'gentlemen', 'sorcerers',   'bridegrooms', 'baron',    'househusbands', 'gods',      'nephew', 'widowers', 'lord', 'brother', 'grooms', 'priest', 'bellboys',  'marquis',     'princes',    'emperors',  'stallion', 'chairman',   'monastery', 'priests',     'boyhood',  'fellas', 'king',  'dudes', 'daddies', 'manservant', 'spokesman',    'tailor',     'cowboys',  'dude',   'bachelors', 'emperor', 'daddy', 'masculism', 'guys', 'enchanter',    'guy', 'fatherhood', 'androgen', 'cameramen',   'godfather', 'strongman',   'god',      'patriarch', 'uncle', 'chairmen',   'brotherhood',  'host',    'husband', 'dad', 'steward',    'males',   'spokesmen',   'pa', 'beau',  'stud', 'bachelor', 'wizard', 'sir',  'nephews',  'bull',     'beaus', 'councilmen',    'landlords',  'grandson',       'fiances',  'stepfathers', 'horsemen',    'grandfathers', 'schoolboy',  'rooster',  'grandsons',      'bachelor',     'cameraman',    'dads', 'master',   'lad',  'policeman',    'monk', 'actors',    'salesmen',    'boyfriend',  'councilman',   'fella',  'statesman',    'paternal', 'chap', 'landlord', 'brethren', 'lords',   'bellboy',   'duke',    'ballet dancer', 'dudes',  'fiance',   'colts',    'husbands', 'suitor',   'businessman',    'masseurs',   'hero',     'deer', 'busboys',  'boyfriends',   'kings',  'brothers', 'masters',    'stepfather', 'grooms', 'son',      'studs',  'cowboy',   'mentleman',  'sons',       'baritone', 'salesman',   'paramour', 'male_host',  'monks',  'menservants',  'headmasters',    'lads',   'congressman',    'airman',   'househusband', 'priest',     'barmen',   'barons',     'handyman',   'beard', 'stewards',      'colt',   'czar',     'stepsons',       'boys',   'lions',      'gentleman', 'masseur',  'bulls',  'uncles', 'bloke', 'beards', 'hubby', 'lion',     'sorcerer',  'father',  'males',    'waiters',    'stepson',      'businessmen',    'heir',     'waiter',   'headmaster',   'man',    'governor',   'god',      'bridegroom', 'grandpa', 'groom', 'dude', 'gents', 'boy',   'grandfather', 'gelding', 'paternity', 'roosters', 'priests', 'manservants',  'busboy',  'heros',    'fraternal', 'adultry',   'fraternity', 'fraternities', 'tailors',      'abbots']
-D1_noun_f = ['countrywoman', 'witches', 'maidservant', 'mothers', 'diva', 'actress', 'spinster', 'mama', 'duchesses', 'barwoman', 'countrywomen', 'dowry',      'hostesses', 'airwomen', 'princess', 'governesses', 'abbess', 'women', 'widow',   'ladies',    'sorceresses', 'brides',      'baroness', 'housewives',    'goddesses', 'niece',  'widows',   'lady', 'sister',  'brides', 'nun',    'bellgirls', 'marchioness', 'princesses', 'empresses', 'mare',     'chairwoman', 'convent',   'priestesses', 'girlhood', 'ladies', 'queen', 'gals',  'mommies', 'maid',       'spokeswoman',  'seamstress', 'cowgirls', 'chick',  'spinsters', 'empress', 'mommy', 'feminism',  'gals', 'enchantress',  'gal', 'motherhood', 'estrogen', 'camerawomen', 'godmother', 'strongwoman', 'goddess',  'matriarch', 'aunt',  'chairwomen', 'sisterhood',   'hostess', 'wife',    'mom', 'stewardess', 'females', 'spokeswomen', 'ma', 'belle', 'minx', 'maiden',   'witch',  'miss', 'nieces',   'mothered', 'belles', 'councilwomen', 'landladies', 'granddaughter',  'fiancees', 'stepmothers', 'horsewomen',  'grandmothers', 'schoolgirl', 'hen',      'granddaughters', 'bachelorette', 'camerawoman',  'moms', 'mistress', 'lass', 'policewoman',  'nun',  'actresses', 'saleswomen',  'girlfriend', 'councilwoman', 'lady',   'stateswoman',  'maternal', 'lass', 'landlady', 'sistren',  'duchess', 'bellgirl',  'duchess', 'ballerina',     'chicks', 'fiancee',  'fillies',  'wives',    'suitress', 'businesswoman',  'masseuses',  'heroine',  'doe',  'busgirls', 'girlfriends',  'queens', 'sisters',  'mistresses', 'stepmother', 'brides', 'daughter', 'minxes', 'cowgirl',  'lady',       'daughters',  'mezzo',    'saleswoman', 'mistress', 'hostess',    'nuns',   'maids',        'headmistresses', 'lasses', 'congresswoman',  'airwoman', 'housewife',    'priestess',  'barwomen', 'baronesses', 'handywoman', 'toque', 'stewardesses',  'filly',  'czarina',  'stepdaughters',  'girls',  'lionesses',  'lady',      'masseuse', 'cows',   'aunts',  'wench', 'toques', 'wife',  'lioness',  'sorceress',  'mother', 'females',  'waitresses', 'stepdaughter', 'businesswomen',  'heiress',  'waitress', 'headmistress', 'woman',  'governess',  'goddess',  'bride',      'grandma', 'bride', 'gal', 'ladies', 'girl',  'grandmother', 'mare',    'maternity', 'hens',     'nuns',    'maidservants', 'busgirl', 'heroines', 'sororal',   'adultress', 'sorority',   'sororities',   'seamstresses', 'abbesses']
+D_noun_m = ['countryman',   'wizards', 'manservant',  'fathers', 'divo', 'actor',   'bachelor', 'papa', 'dukes',     'barman',   'countrymen',   'brideprice', 'hosts',     'airmen',   'prince',   'governors',   'abbot',  'men',   'widower', 'gentlemen', 'sorcerers',   'bridegrooms', 'baron',    'househusbands', 'gods',      'nephew', 'widowers', 'lord', 'brother', 'grooms', 'priest', 'bellboys',  'marquis',     'princes',    'emperors',  'stallion', 'chairman',   'monastery', 'priests',     'boyhood',  'fellas', 'king',  'dudes', 'daddies', 'manservant', 'spokesman',    'tailor',     'cowboys',  'dude',   'bachelors', 'emperor', 'daddy', 'masculism', 'guys', 'enchanter',    'guy', 'fatherhood', 'androgen', 'cameramen',   'godfather', 'strongman',   'god',      'patriarch', 'uncle', 'chairmen',   'brotherhood',  'host',    'husband', 'dad', 'steward',    'males',   'spokesmen',   'pa', 'beau',  'stud', 'bachelor', 'wizard', 'sir',  'nephews',  'bull',     'beaus', 'councilmen',    'landlords',  'grandson',       'fiances',  'stepfathers', 'horsemen',    'grandfathers', 'schoolboy',  'rooster',  'grandsons',      'bachelor',     'cameraman',    'dads', 'master',   'lad',  'policeman',    'monk', 'actors',    'salesmen',    'boyfriend',  'councilman',   'fella',  'statesman',    'paternal', 'chap', 'landlord', 'brethren', 'lords',   'bellboy',   'duke',    'ballet dancer', 'dudes',  'fiance',   'colts',    'husbands', 'suitor',   'businessman',    'masseurs',   'hero',     'deer', 'busboys',  'boyfriends',   'kings',  'brothers', 'masters',    'stepfather', 'grooms', 'son',      'studs',  'cowboy',   'mentleman',  'sons',       'baritone', 'salesman',   'paramour', 'male_host',  'monks',  'menservants',  'headmasters',    'lads',   'congressman',    'airman',   'househusband', 'priest',     'barmen',   'barons',     'handyman',   'beard', 'stewards',      'colt',   'czar',     'stepsons',       'boys',   'lions',      'gentleman', 'masseur',  'bulls',  'uncles', 'bloke', 'beards', 'hubby', 'lion',     'sorcerer',  'father',  'males',    'waiters',    'stepson',      'businessmen',    'heir',     'waiter',   'headmaster',   'man',    'governor',   'god',      'bridegroom', 'grandpa', 'groom', 'dude', 'gents', 'boy',   'grandfather', 'gelding', 'paternity', 'roosters', 'priests', 'manservants',  'busboy',  'heros',    'fraternal', 'adultry',   'fraternity', 'fraternities', 'tailors',      'abbots']
+D_noun_f = ['countrywoman', 'witches', 'maidservant', 'mothers', 'diva', 'actress', 'spinster', 'mama', 'duchesses', 'barwoman', 'countrywomen', 'dowry',      'hostesses', 'airwomen', 'princess', 'governesses', 'abbess', 'women', 'widow',   'ladies',    'sorceresses', 'brides',      'baroness', 'housewives',    'goddesses', 'niece',  'widows',   'lady', 'sister',  'brides', 'nun',    'bellgirls', 'marchioness', 'princesses', 'empresses', 'mare',     'chairwoman', 'convent',   'priestesses', 'girlhood', 'ladies', 'queen', 'gals',  'mommies', 'maid',       'spokeswoman',  'seamstress', 'cowgirls', 'chick',  'spinsters', 'empress', 'mommy', 'feminism',  'gals', 'enchantress',  'gal', 'motherhood', 'estrogen', 'camerawomen', 'godmother', 'strongwoman', 'goddess',  'matriarch', 'aunt',  'chairwomen', 'sisterhood',   'hostess', 'wife',    'mom', 'stewardess', 'females', 'spokeswomen', 'ma', 'belle', 'minx', 'maiden',   'witch',  'miss', 'nieces',   'mothered', 'belles', 'councilwomen', 'landladies', 'granddaughter',  'fiancees', 'stepmothers', 'horsewomen',  'grandmothers', 'schoolgirl', 'hen',      'granddaughters', 'bachelorette', 'camerawoman',  'moms', 'mistress', 'lass', 'policewoman',  'nun',  'actresses', 'saleswomen',  'girlfriend', 'councilwoman', 'lady',   'stateswoman',  'maternal', 'lass', 'landlady', 'sistren',  'duchess', 'bellgirl',  'duchess', 'ballerina',     'chicks', 'fiancee',  'fillies',  'wives',    'suitress', 'businesswoman',  'masseuses',  'heroine',  'doe',  'busgirls', 'girlfriends',  'queens', 'sisters',  'mistresses', 'stepmother', 'brides', 'daughter', 'minxes', 'cowgirl',  'lady',       'daughters',  'mezzo',    'saleswoman', 'mistress', 'hostess',    'nuns',   'maids',        'headmistresses', 'lasses', 'congresswoman',  'airwoman', 'housewife',    'priestess',  'barwomen', 'baronesses', 'handywoman', 'toque', 'stewardesses',  'filly',  'czarina',  'stepdaughters',  'girls',  'lionesses',  'lady',      'masseuse', 'cows',   'aunts',  'wench', 'toques', 'wife',  'lioness',  'sorceress',  'mother', 'females',  'waitresses', 'stepdaughter', 'businesswomen',  'heiress',  'waitress', 'headmistress', 'woman',  'governess',  'goddess',  'bride',      'grandma', 'bride', 'gal', 'ladies', 'girl',  'grandmother', 'mare',    'maternity', 'hens',     'nuns',    'maidservants', 'busgirl', 'heroines', 'sororal',   'adultress', 'sorority',   'sororities',   'seamstresses', 'abbesses']
 
-D1_anatomy_m = ['andropause', 'glans penis',  'testosterone', 'penis',  'sperm', 'prostate',    'urethra',]
-D1_anatomy_f = ['menopause',  'clitoris',     'estradiol',    'vagina', 'ovum',  'skene gland', 'uterus',]
+D_anatomy_m = ['andropause', 'glans penis',  'testosterone', 'penis',  'sperm', 'prostate',    'urethra',]
+D_anatomy_f = ['menopause',  'clitoris',     'estradiol',    'vagina', 'ovum',  'skene gland', 'uterus',]
 
-D1_pronoun_m = [' He', ' His', 'He', 'His', ' he', ' his', 'he', 'his']
-D1_pronoun_f = [' She', ' Her', 'She', 'Her', ' she', ' her', 'she', 'her']
+D_pronoun_m = [' He', ' His', 'He', 'His', ' he', ' his', 'he', 'his']
+D_pronoun_f = [' She', ' Her', 'She', 'Her', ' she', ' her', 'she', 'her']
 
-D1_m = [D1_pronoun_m, D1_noun_m, D1_anatomy_m]
-D1_f = [D1_pronoun_f, D1_noun_f, D1_anatomy_f]
+D_pro_noun_anat_m = [D_pronoun_m, D_noun_m, D_anatomy_m]
+D_pro_noun_anat_f = [D_pronoun_f, D_noun_f, D_anatomy_f]
 
 
 prompt_noun = [
@@ -70,22 +70,22 @@ prompt_anatomy = [
 prompts = [prompt_pronoun, prompt_noun, prompt_anatomy]
 
 
-D1_name = ['pronouns', 'nouns', 'anatomy']
+var_names = ['pronouns', 'nouns', 'anatomy']
 
 
-Data_m_1 = []
-Data_f_1 = []
+Data_pro_noun_anat_m = []
+Data_pro_noun_anat_f = []
 len_list = []
 
-for d1_m, d1_f, d1_name, prompt in zip(D1_m, D1_f, D1_name, prompts):
+for d1_m, d1_f, d1_name, prompt in zip(D_pro_noun_anat_m, D_pro_noun_anat_f, var_names, prompts):
 
   Data_m = utils.concat_list([[eos_token + prpt + word for word in d1_m] for prpt in prompt])
   Data_f = utils.concat_list([[eos_token + prpt + word for word in d1_f] for prpt in prompt])
 
   len_list.append([len(Data_m), len(Data_f)])
 
-  Data_m_1 += Data_m
-  Data_f_1 += Data_f
+  Data_pro_noun_anat_m += Data_m
+  Data_pro_noun_anat_f += Data_f
 
 
 
@@ -95,33 +95,33 @@ There is a total of ~750 distinct names for each gender, but names are not paire
 They are combined with 3 prompts each.
 '''
 
-D2 = pd.read_csv("Data/gendered_names.csv")
+D_name = pd.read_csv("Data/gendered_names.csv")
 threshold = 20
-D2_f = D2[D2['assigned_gender'] == 1][D2['count']>threshold]['name']
-D2_m = D2[D2['assigned_gender'] == 0][D2['count']>threshold]['name']
+D_name_f = D_name[D_name['assigned_gender'] == 1][D_name['count']>threshold]['name']
+D_name_m = D_name[D_name['assigned_gender'] == 0][D_name['count']>threshold]['name']
 
-prompt_m = ['',
-            'My name is ',
-            'His name is ']
-prompt_f = ['',
-            'My name is ',
-            'Her name is ']
+prompt_name_m = ['',
+                 'My name is ',
+                 'His name is ']
+prompt_name_f = ['',
+                 'My name is ',
+                 'Her name is ']
 
-Data_m_2 = utils.concat_list([[eos_token + prpt + word for word in D2_m] for prpt in prompt_m])
-Data_f_2 = utils.concat_list([[eos_token + prpt + word for word in D2_f] for prpt in prompt_f])
+D_name_m = utils.concat_list([[eos_token + prpt + word for word in D_name_m] for prpt in prompt_name_m])
+D_name_f = utils.concat_list([[eos_token + prpt + word for word in D_name_f] for prpt in prompt_name_f])
 
-examples = Data_m_1 + Data_f_1 + Data_m_2 + Data_f_2
-data_lbl = [[D1_name[0]]*len_list[0][0] + [D1_name[1]]*len_list[1][0] 
-            + [D1_name[2]]*len_list[2][0] + [D1_name[0]]*len_list[0][1] 
-            + [D1_name[1]]*len_list[1][1] + [D1_name[2]]*len_list[2][1] 
-            + ['name']*len(Data_m_2 + Data_f_2)][0]
-bin = [1]*len(Data_m_1) + [-1]*len(Data_f_1) + [1]*len(Data_m_2) + [-1]*len(Data_f_2)
+examples = Data_pro_noun_anat_m + Data_pro_noun_anat_f + D_name_m + D_name_f
+data_lbl = [[var_names[0]]*len_list[0][0] + [var_names[1]]*len_list[1][0] 
+            + [var_names[2]]*len_list[2][0] + [var_names[0]]*len_list[0][1] 
+            + [var_names[1]]*len_list[1][1] + [var_names[2]]*len_list[2][1] 
+            + ['name']*len(D_name_m + D_name_f)][0]
+bin = [1]*len(Data_pro_noun_anat_m) + [-1]*len(Data_pro_noun_anat_f) + [1]*len(D_name_m) + [-1]*len(D_name_f)
 
-D = {
+dataset = {
   'examples': examples,
   'label': data_lbl,
   'bin': bin,
   }
 
-DF = pd.DataFrame.from_dict(D, orient = 'columns')
-pd.DataFrame.to_csv(DF, "Data/Train_Data.csv", quotechar='"')
+dataframe = pd.DataFrame.from_dict(dataset, orient = 'columns')
+pd.DataFrame.to_csv(dataframe, "Data/Train_Data.csv", quotechar='"')
