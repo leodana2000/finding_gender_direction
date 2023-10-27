@@ -101,7 +101,7 @@ def attn_forward(module,
   This is a custom attention module designed to stop information from reaching certain future layers with minimal intervention.
   See X for a thorough explanation of the technique.
   We define a set of index on which we want to change the past keys and values for some example. 
-  Thus we first computes all the modified keys a and values. At the right index, after the attention block at tthat index, 
+  Thus we first computes all the modified keys a and values. At the right index, after the attention block at that index, 
   we change the keys and values.
   '''
   

@@ -123,7 +123,7 @@ target_text_B += target_text_B
 pre_prompt_a = 'He is a boy. Answer: male \n '
 pre_prompt_b = 'She is a girl. Answer: female \n '
 
-pre_prompt = 'The task is to predict the gender of the caracter in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
+pre_prompt = 'The task is to predict the gender of the character in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
 example_prompts_B = [eos_token
                      + pre_prompt
@@ -145,7 +145,7 @@ target_text_C += target_text_C
 pre_prompt_a = 'He is a boy. Answer: male \n '
 pre_prompt_b = 'She is a girl. Answer: female \n '
 
-pre_prompt = 'The task is to predict the gender of the caracter in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
+pre_prompt = 'The task is to predict the gender of the character in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
 example_prompts_C = [eos_token
                      + pre_prompt
@@ -167,7 +167,7 @@ target_text_D += target_text_D
 pre_prompt_a = 'He is a boy. Answer: male \n '
 pre_prompt_b = 'She is a girl. Answer: female \n '
 
-pre_prompt = 'The task is to predict the gender of the caracter in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
+pre_prompt = 'The task is to predict the gender of the character in the following sentences. Answer only using the word \'female\' or \'male\'. \n '
 
 example_prompts_D = [eos_token
                      + pre_prompt
