@@ -1,18 +1,20 @@
 # code that contains the functions to store and evaluate hyperplanes and directions
 import torch as t
-from tqdm import tqdm
-from sklearn.linear_model import LogisticRegression
+from tqdm import tqdm #type: ignore
+from sklearn.linear_model import LogisticRegression # type: ignore
 
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure import leace
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
+from typing import Literal, Tuple, List
 
-Bin = 1 | 0 | -1
-Label = list[Bin]
+Bin = Literal[1, 0, -1]
 Data = str
+Label = List[Bin]
+Token = int
 
 
-def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True, learn_probe=False, **dict) -> tuple[list[LeaceEraser]]:
+def storing_hyperplanes(dataset : List[List[Tuple[Data, Label]]], post_layer_norm=True, learn_probe=False, **dict) -> Tuple[List[LeaceEraser], List[LeaceEraser], List[LeaceEraser]]:
   '''
   Computes hyperplanes for the difference in mean, diff-mean quantile and Logisticregression method.
   The dataset is batched, and its elements are composed of:
@@ -88,7 +90,7 @@ def storing_hyperplanes(dataset : list[list[Data, Label]], post_layer_norm=True,
 
 
 
-def hyperplane_acc(dataset : list[list[Data, Label]], eval_metric : list, **dict) -> list[list[float]]:
+def hyperplane_acc(dataset : List[List[Tuple[Data, Label]]], eval_metric : List, **dict) -> t.Tensor:
   '''
   As storing_hyperplanes, takes a dataset of sentence to evaluate. 
   The evaluation is a metric that computes on which side of the hyperplane the activation of the last token is.

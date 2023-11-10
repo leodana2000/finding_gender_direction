@@ -1,7 +1,7 @@
 # Code containing functions used to compute the continuation of a sentence with the concept erasure method.
 
 import torch as t
-from tqdm import tqdm
+from tqdm import tqdm #type: ignore
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
 from hyperplane_computation.inference_time_modif import attn_forward

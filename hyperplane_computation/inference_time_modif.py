@@ -1,23 +1,26 @@
 # Code that contains all the functions performing the inference-time-modification.
 
 import torch as t 
-from tqdm import tqdm
+from tqdm import tqdm #type: ignore
 from hyperplane_computation import utils
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
+from typing import Literal, Tuple, List
 
-Bin = 1 | -1
+Bin = Literal[1, 0, -1]
 Data = str
 Token = int
 
 
-def score(examples : list[list[Data], list[Bin], list[Data]],
-          logit_target : [list[Token], list[Token]], 
-          leace_list : list[LeaceEraser], 
-          leace_res_list : list[LeaceEraser], 
-          layer_list : list[list[int]], 
-          layer_res_list : list[int], 
-          lbds : t.Tensor, 
-          **dict):
+def score(
+    examples : List[Tuple[List[Data], List[Bin], List[Data]]],
+    logit_target : Tuple[List[Token], List[Token]], 
+    leace_list : List[LeaceEraser], 
+    leace_res_list : List[LeaceEraser], 
+    layer_list : List[List[int]], 
+    layer_res_list : List[int], 
+    lbds : t.Tensor, 
+    **dict
+ ):
   '''
   This function returns the probabilities of each binary answers, for each examples and for each lambdas.
   examples: batched list containing the questions, their binary label, and the target string of where to modify the attention,
@@ -205,7 +208,7 @@ def diag_proba(logit_target, len_example, proba):
   return t.sum(proba[diag, len_example][:, logit_target].squeeze(-1), dim = -1).unsqueeze(0)
 
 
-def compute_proba_acc(score : list[t.Tensor], examples : list[list[Data], list[Bin], list[str]], **dict):
+def compute_proba_acc(score : List[t.Tensor], examples : List[Tuple[List[Data], List[Bin], List[Data]]], **dict):
   '''
   Computes the probability and accuracy for each lbds, using bin to indicate which gender was the right one.
   '''
@@ -216,8 +219,8 @@ def compute_proba_acc(score : list[t.Tensor], examples : list[list[Data], list[B
   score = t.cat([t.transpose(t_batch, 0, 3) for t_batch in score], dim=0)
   score = t.transpose(t.transpose(score, 0, 3), 0, 2)
 
-  acc = t.mean(((score[0] - score[1])*bin > 0).to(int), dim=-1, dtype=float)
-  pos_ex = (bin > 0).to(int)
+  acc = t.mean(((score[0] - score[1])*bin > 0).to(t.int), dim=-1, dtype=t.float)
+  pos_ex = (bin > 0).to(t.int)
   neg_ex = 1 - pos_ex
   proba = t.cat([(t.mean(score[0]*pos_ex, dim=-1) + t.mean(score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
                      (t.mean(score[0]*neg_ex, dim=-1) + t.mean(score[1]*pos_ex, dim=-1)).unsqueeze(-1)], dim=-1)

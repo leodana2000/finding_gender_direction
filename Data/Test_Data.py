@@ -1,5 +1,5 @@
 #Code to generate de test data, run init_dataset.py to generate it.
-import pandas as pd
+import pandas as pd #type: ignore
 eos_token = '<|endoftext|>'
 
 def generate_testset(threshold=20):

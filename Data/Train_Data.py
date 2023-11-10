@@ -1,7 +1,6 @@
 #Code to generate de training data, run init_dataset.py to generate it.
-import pandas as pd
+import pandas as pd #type: ignore
 from itertools import product
-from Data.Test_Data import add_preprompt
 eos_token = '<|endoftext|>'
 
 def generate_trainset_v1(threshold=20):
@@ -23,7 +22,7 @@ def generate_trainset_v1(threshold=20):
   D_anatomy_m = ['andropause', 'glans penis',  'testosterone', 'penis',  'sperm', 'prostate',    'urethra',]
   D_anatomy_f = ['menopause',  'clitoris',     'estradiol',    'vagina', 'ovum',  'skene gland', 'uterus',]
 
-  D_pronoun_m = [' He', ' His', 'He', 'His', ' he', ' his', 'he', 'his']
+  D_pronoun_m = [' He', ' His', 'He', 'His', 'Him', ' Him', ' he', ' his', 'he', 'his', 'him', ' him']
   D_pronoun_f = [' She', ' Her', 'She', 'Her', ' she', ' her', 'she', 'her']
 
   D_name_f = D_name[D_name['assigned_gender'] == 1][D_name['count']>threshold]['name']
@@ -197,13 +196,17 @@ def generate_trainset_v2(threshold=20):
 
 
 def generate_dataset_v3(threshold=50):
+  """
+  Simpler version of dataset_v1: less weird prompt and no anatomy.
+  """
+  
   D_name = pd.read_csv("Data/gendered_names.csv")
 
   D_noun_m = ['countryman',   'wizards', 'manservant',  'fathers', 'divo', 'actor',   'bachelor', 'papa', 'dukes',     'barman',   'countrymen',   'brideprice', 'hosts',     'airmen',   'prince',   'governors',   'abbot',  'men',   'widower', 'gentlemen', 'sorcerers',   'bridegrooms', 'baron',    'househusbands', 'gods',      'nephew', 'widowers', 'lord', 'brother', 'grooms', 'priest', 'bellboys',  'marquis',     'princes',    'emperors',  'stallion', 'chairman',   'monastery', 'priests',     'boyhood',  'fellas', 'king',  'dudes', 'daddies', 'manservant', 'spokesman',    'tailor',     'cowboys',  'dude',   'bachelors', 'emperor', 'daddy', 'masculism', 'guys', 'enchanter',    'guy', 'fatherhood', 'androgen', 'cameramen',   'godfather', 'strongman',   'god',      'patriarch', 'uncle', 'chairmen',   'brotherhood',  'host',    'husband', 'dad', 'steward',    'males',   'spokesmen',   'pa', 'beau',  'stud', 'bachelor', 'wizard', 'sir',  'nephews',  'bull',     'beaus', 'councilmen',    'landlords',  'grandson',       'fiances',  'stepfathers', 'horsemen',    'grandfathers', 'schoolboy',  'rooster',  'grandsons',      'bachelor',     'cameraman',    'dads', 'master',   'lad',  'policeman',    'monk', 'actors',    'salesmen',    'boyfriend',  'councilman',   'fella',  'statesman',    'paternal', 'chap', 'landlord', 'brethren', 'lords',   'bellboy',   'duke',    'ballet dancer', 'dudes',  'fiance',   'colts',    'husbands', 'suitor',   'businessman',    'masseurs',   'hero',     'deer', 'busboys',  'boyfriends',   'kings',  'brothers', 'masters',    'stepfather', 'grooms', 'son',      'studs',  'cowboy',   'mentleman',  'sons',       'baritone', 'salesman',   'paramour', 'male_host',  'monks',  'menservants',  'headmasters',    'lads',   'congressman',    'airman',   'househusband', 'priest',     'barmen',   'barons',     'handyman',   'beard', 'stewards',      'colt',   'czar',     'stepsons',       'boys',   'lions',      'gentleman', 'masseur',  'bulls',  'uncles', 'bloke', 'beards', 'hubby', 'lion',     'sorcerer',  'father',  'males',    'waiters',    'stepson',      'businessmen',    'heir',     'waiter',   'headmaster',   'man',    'governor',   'god',      'bridegroom', 'grandpa', 'groom', 'dude', 'gents', 'boy',   'grandfather', 'gelding', 'paternity', 'roosters', 'priests', 'manservants',  'busboy',  'heros',    'fraternal', 'adultry',   'fraternity', 'fraternities', 'tailors',      'abbots']
   D_noun_f = ['countrywoman', 'witches', 'maidservant', 'mothers', 'diva', 'actress', 'spinster', 'mama', 'duchesses', 'barwoman', 'countrywomen', 'dowry',      'hostesses', 'airwomen', 'princess', 'governesses', 'abbess', 'women', 'widow',   'ladies',    'sorceresses', 'brides',      'baroness', 'housewives',    'goddesses', 'niece',  'widows',   'lady', 'sister',  'brides', 'nun',    'bellgirls', 'marchioness', 'princesses', 'empresses', 'mare',     'chairwoman', 'convent',   'priestesses', 'girlhood', 'ladies', 'queen', 'gals',  'mommies', 'maid',       'spokeswoman',  'seamstress', 'cowgirls', 'chick',  'spinsters', 'empress', 'mommy', 'feminism',  'gals', 'enchantress',  'gal', 'motherhood', 'estrogen', 'camerawomen', 'godmother', 'strongwoman', 'goddess',  'matriarch', 'aunt',  'chairwomen', 'sisterhood',   'hostess', 'wife',    'mom', 'stewardess', 'females', 'spokeswomen', 'ma', 'belle', 'minx', 'maiden',   'witch',  'miss', 'nieces',   'mothered', 'belles', 'councilwomen', 'landladies', 'granddaughter',  'fiancees', 'stepmothers', 'horsewomen',  'grandmothers', 'schoolgirl', 'hen',      'granddaughters', 'bachelorette', 'camerawoman',  'moms', 'mistress', 'lass', 'policewoman',  'nun',  'actresses', 'saleswomen',  'girlfriend', 'councilwoman', 'lady',   'stateswoman',  'maternal', 'lass', 'landlady', 'sistren',  'duchess', 'bellgirl',  'duchess', 'ballerina',     'chicks', 'fiancee',  'fillies',  'wives',    'suitress', 'businesswoman',  'masseuses',  'heroine',  'doe',  'busgirls', 'girlfriends',  'queens', 'sisters',  'mistresses', 'stepmother', 'brides', 'daughter', 'minxes', 'cowgirl',  'lady',       'daughters',  'mezzo',    'saleswoman', 'mistress', 'hostess',    'nuns',   'maids',        'headmistresses', 'lasses', 'congresswoman',  'airwoman', 'housewife',    'priestess',  'barwomen', 'baronesses', 'handywoman', 'toque', 'stewardesses',  'filly',  'czarina',  'stepdaughters',  'girls',  'lionesses',  'lady',      'masseuse', 'cows',   'aunts',  'wench', 'toques', 'wife',  'lioness',  'sorceress',  'mother', 'females',  'waitresses', 'stepdaughter', 'businesswomen',  'heiress',  'waitress', 'headmistress', 'woman',  'governess',  'goddess',  'bride',      'grandma', 'bride', 'gal', 'ladies', 'girl',  'grandmother', 'mare',    'maternity', 'hens',     'nuns',    'maidservants', 'busgirl', 'heroines', 'sororal',   'adultress', 'sorority',   'sororities',   'seamstresses', 'abbesses']
 
-  D_pronoun_m = [' He', ' His', 'He', 'His', ' he', ' his', 'he', 'his']
-  D_pronoun_f = [' She', ' Her', 'She', 'Her', ' she', ' her', 'she', 'her']
+  D_pronoun_m = ['He', 'His', 'Him', 'he', 'his', 'him']
+  D_pronoun_f = [ 'She', 'Her', 'she', 'her']
   
   D_name_f = D_name[D_name['assigned_gender'] == 1][D_name['count']>threshold]['name']
   D_name_m = D_name[D_name['assigned_gender'] == 0][D_name['count']>threshold]['name']
@@ -215,15 +218,19 @@ def generate_dataset_v3(threshold=50):
 
   prompt_pronoun = [
      '',
+     ' ',
   ]
 
-  prompt_name_m = [' ',
-                  'My name is ',
-                  'His name is ']
-  prompt_name_f = [' ',
-                  'My name is ',
-                  'Her name is ']
-
+  prompt_name_m = [
+     ' ',
+     'My name is ',
+     'His name is '
+  ]
+  prompt_name_f = [
+     ' ',
+     'My name is ',
+     'Her name is '
+  ]
 
   D_pro_m, D_pro_f, len_pro_m, len_pro_f = add_preprompt(D_pronoun_m, D_pronoun_f, prompt_pronoun, prompt_pronoun)
   D_noun_m, D_noun_f, len_noun_m, len_noun_f = add_preprompt(D_noun_m, D_noun_f, prompt_noun, prompt_noun)

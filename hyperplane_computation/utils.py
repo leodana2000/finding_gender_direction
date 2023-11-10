@@ -4,14 +4,15 @@ import random
 import torch as t
 
 from hyperplane_computation.concept_erasure.leace import LeaceEraser
+from typing import Literal, Tuple, List
 
-Bin = 1 | 0 | -1
-Label = list[Bin]
+Bin = Literal[1, 0, -1]
 Data = str
+Label = List[Bin]
 Token = int
 
 
-def select_rand(lst, nb_ex, seed):
+def select_rand(lst : List, nb_ex : int, seed : int):
     """Randomly selects nb_ex elements of the list."""
     assert nb_ex < len(lst)
     random.seed(seed)
@@ -19,11 +20,12 @@ def select_rand(lst, nb_ex, seed):
     return lst[:nb_ex]
 
 
-def initiate_activations(dataset: list[list[Data, Label]], **dict):
+def initiate_activations(dataset: List[List[Tuple[Data, Label]]], **dict):
     """
-  Initializes the activations to be fed in the layer of the network.
-  Also computes the labels and indices to keep track of where to look for the right logits since we use padding.
-  """
+    Initializes the activations to be fed in the layer of the network.
+    Also computes the labels and indices to keep track of where to look for the right logits since we use padding.
+    """
+
     device = dict["device"]
     model = dict["model"]
     tokenizer = dict["tokenizer"]
@@ -45,7 +47,7 @@ def initiate_activations(dataset: list[list[Data, Label]], **dict):
             [data[0] for data in batch], padding=True, return_tensors="pt"
         )["input_ids"].to(device)
         positions = (
-            t.arange(tokenized_batch.shape[1]).to(int).to(device).to(int).to(device)
+            t.arange(tokenized_batch.shape[1]).to(t.int).to(device).to(t.int).to(device)
         )
         activations.append(
             model.transformer.wte(tokenized_batch) + model.transformer.wpe(positions)
@@ -58,10 +60,10 @@ def initiate_activations(dataset: list[list[Data, Label]], **dict):
 
 
 def gather_update_acts(
-    activations: list[t.Tensor],
+    activations: List[t.Tensor],
     layer: int,
     post_layer_norm: bool,
-    indices: list[t.Tensor],
+    indices: List[t.Tensor],
     N_batch: int,
     **dict
 ):
@@ -130,17 +132,17 @@ def get_quantile(leace_eraser: LeaceEraser, all_acts: t.Tensor, **dict):
     return quantile
 
 
-def probe_eval(erasers: list[LeaceEraser], **dict):
+def probe_eval(erasers: List[LeaceEraser], **dict):
     """
-  Initiate a function that will evaluate activations using different hyperplanes for each layers.
-  """
+    Initiate a function that will evaluate activations using different hyperplanes for each layers.
+    """
     device = dict["device"]
     cosim = t.nn.CosineSimilarity(-1)
 
-    def metric(all_acts: t.Tensor, layer: int, true_label: t.Tensor):
+    def metric(all_acts : t.Tensor, layer : int, true_label : t.Tensor):
         """
-    Evaluate on which side of the hyperplane the activations are, and return the accuracy of the hyperplane.
-    """
+        Evaluate on which side of the hyperplane the activations are, and return the accuracy of the hyperplane.
+        """
         dir = erasers[layer].proj_right.to(device)
         bias = erasers[layer].bias.to(device)
         Nb_ex = len(all_acts)
@@ -180,7 +182,7 @@ def show_proba(
     return proba_token_list[-nb_tokens:]
 
 
-def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
+def finds_indices(ex_batch: List[List[Token]], tar_batch: List[List[Token]]):
     """
   Finds the occurrences of the target inside the examples, but only the last one for each target.
   stream_indices : list[int], list of all streams where the target was detected.
@@ -189,9 +191,9 @@ def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
   the join example and stream where it was detected.
   """
 
-    stream_indices = []
-    example_indices = []
-    stream_example_indices = [[], []]
+    stream_indices : List = []
+    example_indices : List = []
+    stream_example_indices : List = [[], []]
 
     for i, (ex, tar) in enumerate(zip(ex_batch, tar_batch)):
         len_tar = len(tar)
@@ -208,9 +210,7 @@ def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
         else:
             # [-1] means that we take only the last occurrence in the sentence.
             # ToDo: more general version that could account for any number of occurrences.
-            position = t.where(t.tensor(ex, dtype=t.int) == t.tensor([tar[0]], dtype=t.int))[0][
-                -1
-            ].item()
+            position = int(t.where(t.tensor(ex, dtype=t.int) == t.tensor([tar[0]], dtype=t.int))[0][-1].item())
             if [ex[i] for i in range(position, position + len_tar)] == tar:
                 s_indice = t.tensor(
                     [pos for pos in range(position, position + len_tar)],

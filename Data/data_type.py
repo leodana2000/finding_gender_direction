@@ -1,5 +1,11 @@
 import random
-from pandas import DataFrame
+from pandas import DataFrame #type: ignore
+from typing import Literal, Tuple, List
+
+Bin = Literal[1, 0, -1]
+Data = str
+Label = List[Bin]
+Token = int
 
 class DataStorage:
     def __init__(self, data, batch_size = 1024, rand_seed = 42, train_test_ratio = 0.9) -> None:
@@ -16,9 +22,9 @@ class DataStorage:
         
         self.data : DataFrame = data
         self.nb_class : int = data['label'].nunique()
-        self.label_names : list[str] = data['label'].unique()
-        self.is_training : list[bool]
-        self.dim_labels : list[list[int]]
+        self.label_names : List[str] = data['label'].unique()
+        self.is_training : List[bool]
+        self.dim_labels : List[List[Bin]]
 
         self.batch_size : int = batch_size
         self.rand_seed : int = rand_seed
@@ -34,7 +40,7 @@ class DataStorage:
         '''
         dim_labels = []
         for label, valence in zip(self.data['label'], self.data['bin']):
-            dim_label = [0]*self.nb_class
+            dim_label : List[Bin] = [0]*self.nb_class
             for i, name in enumerate(self.label_names):
                 if label == name:
                     dim_label[i] = valence
@@ -65,7 +71,7 @@ class DataStorage:
                     index += 1
 
 
-    def batch(self, unbatched : list[str]) -> list[list[str]]:
+    def batch(self, unbatched : List[Tuple[Data, Label]]) -> List[List[Tuple[Data, Label]]]:
         '''
         Transform the data into subsets of size at most bach_size.
         '''
@@ -75,28 +81,32 @@ class DataStorage:
         return batched
 
 
-    def get_ex(self, method, multi_dim=True, label='all') -> list[list[str, list[int]]]:
+    def get_ex(self, method, multi_dim=True, label='all') -> List[List[Tuple[Data, Label]]]:
         '''
         Returns the batched data to train, test, or learn the hyperplanes.
         Train and Test splits the data into different subsets, and respect the class proportions.
         In each case, you can choose to only take a single classes of examples.
         '''
         labels = self.get_labels(multi_dim=multi_dim)
-        sentences = self.data['examples']
+        sentences : List[Data] = self.data['examples']
+
         if label == 'all':
             is_names = [True]*len(sentences)
         else:
             is_names = (self.data['label'] == label).values.tolist()
+
+        examples : List[Tuple[Data, Label]]
         if method == 'train':
-            examples = [[sentence, label] for sentence, label, is_train, is_name in zip(sentences, labels, self.is_training, is_names) if is_train and is_name]
+            examples = [(sentence, label) for sentence, label, is_train, is_name in zip(sentences, labels, self.is_training, is_names) if is_train and is_name]
         elif method == 'test':
-            examples = [[sentence, label] for sentence, label, is_train, is_name in zip(sentences, labels, self.is_training, is_names) if (not is_train) and is_name]
+            examples = [(sentence, label) for sentence, label, is_train, is_name in zip(sentences, labels, self.is_training, is_names) if (not is_train) and is_name]
         elif method == 'learn':
-            examples = [[sentence, label] for sentence, label, is_name in zip(sentences, labels, is_names) if is_name]
+            examples = [(sentence, label) for sentence, label, is_name in zip(sentences, labels, is_names) if is_name]
+
         return self.batch(examples)
 
 
-    def get_labels(self, multi_dim=True) -> list[list[int]]:
+    def get_labels(self, multi_dim=True) -> List[List[Bin]]:
         '''
         Changes the format of the labels if you want to have it one dimensional or not, and returns them.
         '''
