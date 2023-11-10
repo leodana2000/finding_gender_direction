@@ -205,7 +205,7 @@ def diag_proba(logit_target, len_example, proba):
   return t.sum(proba[diag, len_example][:, logit_target].squeeze(-1), dim = -1).unsqueeze(0)
 
 
-def compute_proba_acc(score : list[t.Tensor], examples : list[list[Data | Bin | str]], **dict):
+def compute_proba_acc(score : list[t.Tensor], examples : list[list[Data], list[Bin], list[str]], **dict):
   '''
   Computes the probability and accuracy for each lbds, using bin to indicate which gender was the right one.
   '''
