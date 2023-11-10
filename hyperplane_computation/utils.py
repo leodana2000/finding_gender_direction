@@ -226,7 +226,7 @@ def finds_indices(ex_batch: list[list[Token]], tar_batch: list[list[Token]]):
         example_indices.append(e_indice)
 
     return [
-        t.cat(stream_indices, dim=0, dtype=t.int),
-        t.cat(example_indices, dim=0, dtype=t.int),
-        t.tensor(stream_example_indices, dtype=t.int),
+        t.cat(stream_indices, dim=0),
+        t.cat(example_indices, dim=0),
+        t.tensor(stream_example_indices),
     ]
