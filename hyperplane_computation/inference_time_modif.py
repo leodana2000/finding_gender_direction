@@ -57,7 +57,7 @@ def score(
     for lbd in tqdm(lbds):
       hook = hook_wte(lbd, indices)
       lbds_score.append(cache_intervention(example_tokens, logit_target, leace_list, leace_res_list, 
-                                      len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
+                                           len_examples, meta_hook, hook, layer_list, layer_res_list, **dict))
     
     score.append(t.cat(lbds_score, dim=0))
 
@@ -176,8 +176,9 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
 
   score = []
   for layers, layers_res in zip(layer_list, layer_res_list):
-    for layer, layer_res in zip(layers, layers_res):
+    for layer in layers:
       model.transformer.h[layer].attn.register_forward_hook(meta_hook(hook(leace_list[layer])))
+    for layer_res in layers_res:
       model.transformer.h[layer_res].attn.register_forward_pre_hook(hook(leace_res_list[layer_res]))
 
     probas = t.softmax(model(example_tokens).logits, dim = -1)
@@ -185,8 +186,9 @@ def cache_intervention(example_tokens, logit_target, leace_list, leace_res_list,
     male_proba = diag_proba(logit_target[0], len_example, probas)
     female_proba = diag_proba(logit_target[1], len_example, probas)
 
-    for layer, layer_res in zip(layers, layers_res):
+    for layer in layers:
       model.transformer.h[layer].attn._forward_hooks.clear()
+    for layer_res in layers_res:
       model.transformer.h[layer_res].attn._forward_pre_hooks.clear()
 
     score.append(t.cat([male_proba, female_proba], dim = 0).unsqueeze(0))
@@ -216,13 +218,13 @@ def compute_proba_acc(score : List[t.Tensor], examples : List[Tuple[List[Data], 
 
   # score has shape [batch, lbds, experiments, binary, questions]
   bin = t.cat([t.tensor(ex_bin_tar[1], dtype=t.int) for ex_bin_tar in examples], dim=0).to(device)
-  score = t.cat([t.transpose(t_batch, 0, 3) for t_batch in score], dim=0)
-  score = t.transpose(t.transpose(score, 0, 3), 0, 2)
+  t_score = t.cat([t.transpose(t_batch, 0, 3) for t_batch in score], dim=0)
+  t_score = t.transpose(t.transpose(t_score, 0, 3), 0, 2)
 
-  acc = t.mean(((score[0] - score[1])*bin > 0).to(t.int), dim=-1, dtype=t.float)
+  acc = t.mean(((t_score[0] - t_score[1])*bin > 0).to(t.int), dim=-1, dtype=t.float)
   pos_ex = (bin > 0).to(t.int)
   neg_ex = 1 - pos_ex
-  proba = t.cat([(t.mean(score[0]*pos_ex, dim=-1) + t.mean(score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
-                     (t.mean(score[0]*neg_ex, dim=-1) + t.mean(score[1]*pos_ex, dim=-1)).unsqueeze(-1)], dim=-1)
+  proba = t.cat([(t.mean(t_score[0]*pos_ex, dim=-1) + t.mean(t_score[1]*neg_ex, dim=-1)).unsqueeze(-1), 
+                     (t.mean(t_score[0]*neg_ex, dim=-1) + t.mean(t_score[1]*pos_ex, dim=-1)).unsqueeze(-1)], dim=-1)
   
   return t.transpose(proba, 1, 2), acc
